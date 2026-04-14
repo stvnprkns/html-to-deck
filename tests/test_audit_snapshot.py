@@ -37,6 +37,25 @@ class AuditSnapshotTest(unittest.TestCase):
                     text_blocks=["Owners and milestones."],
                     pattern_signature="metric_then_chart",
                     claims=[SlideClaim("Onboarding cut churn 2 points", has_evidence=True, provenance="CS analysis")],
+                    body_metadata={
+                        "visual_intent": "diagram",
+                        "block_type": "image",
+                        "diagram_source": "bitmap",
+                    },
+                ),
+                SlideSpec(
+                    id="s4",
+                    title="Provisioning flow as code",
+                    takeaway="The same diagram represented as code-spec should pass audit",
+                    communication_job="inform",
+                    text_blocks=["Mermaid source rendered by the runtime."],
+                    pattern_signature="stepwise_flow",
+                    claims=[SlideClaim("Generated from source-controlled spec", has_evidence=True, provenance="git")],
+                    body_metadata={
+                        "visual_intent": "diagram",
+                        "block_type": "image",
+                        "diagram_source": "code_spec",
+                    },
                 ),
             ]
         )

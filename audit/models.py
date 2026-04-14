@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from dataclasses import asdict, dataclass
+from dataclasses import asdict, dataclass, field
 from typing import Literal
 
 Severity = Literal["low", "medium", "high", "critical"]
@@ -22,6 +22,7 @@ class SlideSpec:
     text_blocks: list[str]
     pattern_signature: str
     claims: list[SlideClaim]
+    body_metadata: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
