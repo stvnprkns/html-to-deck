@@ -4,11 +4,29 @@ from __future__ import annotations
 
 from ..schema.ir import DeckDocument
 
+MAX_WORDS_PER_SLIDE = 45
+MAX_BULLETS_PER_SLIDE = 6
+
 
 def run_quality_checks(deck: DeckDocument) -> list[str]:
     issues: list[str] = []
     if not deck.slides:
         issues.append("Deck has no slides")
+        return issues
+
+    if len(deck.slides) == 1:
+        issues.append("Deck collapsed to a single slide")
+
+    if not deck.source_href:
+        issues.append("Deck metadata missing source_href")
+
+    for index, slide in enumerate(deck.slides, start=1):
+        word_count = sum(len(bullet.split()) for bullet in slide.bullets)
+        if word_count > MAX_WORDS_PER_SLIDE:
+            issues.append(f"slide-{index} exceeds word budget")
+        if len(slide.bullets) > MAX_BULLETS_PER_SLIDE:
+            issues.append(f"slide-{index} exceeds bullet budget")
+
     issues.extend(_check_diagram_should_be_code(deck))
     return issues
 

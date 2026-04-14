@@ -1,0 +1,166 @@
+{
+  "article-story": {
+    "audit": {
+      "issue_count": 0,
+      "issues": []
+    },
+    "deck_type": "article_story",
+    "slides": [
+      {
+        "bullets": [
+          "Vacant lots transformed into productive gardens in less than two years."
+        ],
+        "intent": "title",
+        "layout": "hero",
+        "metadata": {},
+        "title": "Inside the Urban Farming Revival"
+      },
+      {
+        "bullets": [
+          "Background",
+          "Local residents partnered with civic organizations for micro-grants.",
+          "Turning Point",
+          "A heat wave made food deserts visible and accelerated participation."
+        ],
+        "intent": "content",
+        "layout": "cards_grid",
+        "metadata": {},
+        "title": "Key Points"
+      },
+      {
+        "bullets": [
+          "Deck type: article_story"
+        ],
+        "intent": "summary",
+        "layout": "closing",
+        "metadata": {},
+        "title": "Summary"
+      }
+    ],
+    "source_href": "file:///workspace/html-to-deck/fixtures/html/article-story.html"
+  },
+  "case-study": {
+    "audit": {
+      "issue_count": 0,
+      "issues": []
+    },
+    "deck_type": "case_study",
+    "slides": [
+      {
+        "bullets": [
+          "A B2B SaaS company redesigned first-run tasks and support messaging."
+        ],
+        "intent": "title",
+        "layout": "hero",
+        "metadata": {},
+        "title": "Case Study: Onboarding Optimization"
+      },
+      {
+        "bullets": [
+          "Challenge",
+          "Users stalled in account setup after configuration complexity increased.",
+          "Outcome",
+          "Activation improved from 48% to 67%",
+          "Support tickets decreased by 22%"
+        ],
+        "intent": "content",
+        "layout": "cards_grid",
+        "metadata": {},
+        "title": "Key Points"
+      },
+      {
+        "bullets": [
+          "Deck type: case_study"
+        ],
+        "intent": "summary",
+        "layout": "closing",
+        "metadata": {},
+        "title": "Summary"
+      }
+    ],
+    "source_href": "file:///workspace/html-to-deck/fixtures/html/case-study.html"
+  },
+  "landing-page-narrative": {
+    "audit": {
+      "issue_count": 0,
+      "issues": []
+    },
+    "deck_type": "report_summary",
+    "slides": [
+      {
+        "bullets": [
+          "Nimbus unifies docs, meetings, and workflows into a shared memory layer."
+        ],
+        "intent": "title",
+        "layout": "hero",
+        "metadata": {},
+        "title": "Launch Narrative for Nimbus AI"
+      },
+      {
+        "bullets": [
+          "Problem",
+          "Knowledge is fragmented across tools, leading to repeated work.",
+          "Solution",
+          "Context-aware retrieval and action suggestions keep teams aligned.",
+          "Proof",
+          "Pilot customers reduced time-to-answer by 41 percent."
+        ],
+        "intent": "content",
+        "layout": "cards_grid",
+        "metadata": {},
+        "title": "Key Points"
+      },
+      {
+        "bullets": [
+          "Deck type: report_summary"
+        ],
+        "intent": "summary",
+        "layout": "closing",
+        "metadata": {},
+        "title": "Summary"
+      }
+    ],
+    "source_href": "file:///workspace/html-to-deck/fixtures/html/landing-page-narrative.html"
+  },
+  "report-summary": {
+    "audit": {
+      "issue_count": 0,
+      "issues": []
+    },
+    "deck_type": "report_summary",
+    "slides": [
+      {
+        "bullets": [
+          "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals."
+        ],
+        "intent": "title",
+        "layout": "hero",
+        "metadata": {},
+        "title": "Q4 Business Report Summary"
+      },
+      {
+        "bullets": [
+          "Highlights",
+          "ARR reached $12.4M",
+          "Gross retention improved to 94%",
+          "Risks",
+          "Hiring pipeline for senior engineering remains constrained in core regions."
+        ],
+        "intent": "content",
+        "layout": "cards_grid",
+        "metadata": {},
+        "title": "Key Points"
+      },
+      {
+        "bullets": [
+          "Deck type: report_summary"
+        ],
+        "intent": "summary",
+        "layout": "closing",
+        "metadata": {},
+        "title": "Summary"
+      }
+    ],
+    "source_href": "file:///workspace/html-to-deck/fixtures/html/report-summary.html"
+  }
+}
