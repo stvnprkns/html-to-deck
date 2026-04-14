@@ -61,6 +61,13 @@ Generate an interactive HTML deck viewer (keyboard + touch navigation):
 PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html
 ```
 
+The CLI prints the written output path on stdout (for example `out/deck.html`), then prints the audit summary by default.
+
+### Python version
+
+Use Python 3.11+ when running the new `html_to_deck.cli` entrypoint locally.
+Older interpreters (for example 3.9) may fail on enum features used by the v1 CLI/tooling.
+
 ## Running tests
 
 ```bash
