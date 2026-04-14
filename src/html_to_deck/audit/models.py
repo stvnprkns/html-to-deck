@@ -32,6 +32,17 @@ class AuditReport:
             counts[warning.severity] += 1
         return counts
 
+
+    @property
+    def summary_line(self) -> str:
+        status = "BLOCKERS" if self.has_blockers else "OK"
+        counts = self.counts_by_severity
+        return (
+            f"audit={status} warning_count={len(self.warnings)} "
+            f"critical={counts['critical']} high={counts['high']} "
+            f"medium={counts['medium']} low={counts['low']}"
+        )
+
     def to_dict(self) -> dict[str, object]:
         return {
             "has_blockers": self.has_blockers,

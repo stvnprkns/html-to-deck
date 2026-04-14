@@ -209,10 +209,7 @@ class HtmlDeckRenderer:
     def _render_audit_summary(audit_report: AuditReport | None) -> str:
         if audit_report is None:
             return ""
-        status = "BLOCKERS" if audit_report.has_blockers else "OK"
-        counts = audit_report.counts_by_severity
-        summary = f"{status}: c={counts['critical']} h={counts['high']} m={counts['medium']} l={counts['low']}"
-        return f'<div class="audit-badge" data-audit-summary>{escape(summary)}</div>'
+        return f'<div class="audit-badge" data-audit-summary>{escape(audit_report.summary_line)}</div>'
 
     @staticmethod
     def _render_source_link(source_href: str | None) -> str:
