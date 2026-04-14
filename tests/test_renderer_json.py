@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import (
+from html_to_deck.pipeline.v1_compat import (
     apply_design,
     apply_layout,
     audit_deck,
