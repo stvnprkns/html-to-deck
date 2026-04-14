@@ -1,0 +1,5 @@
+# Reduce add/add and adjacent-line conflicts in package export files.
+src/html_to_deck/**/__init__.py merge=union
+
+# Keep generated fixtures deterministic in future updates.
+fixtures/** text eol=lf
