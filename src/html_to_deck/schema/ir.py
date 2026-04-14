@@ -18,13 +18,7 @@ class Slide:
     intent: SlideIntent
     title: str
     bullets: list[str] = field(default_factory=list)
-    body: str | None = None
-    notes: str | None = None
     metadata: dict[str, Any] = field(default_factory=dict)
-    evidence: list[str] = field(default_factory=list)
-    source_refs: list[str] = field(default_factory=list)
-    layout_hint: str | None = None
-    pattern: str | None = None
 
 
 @dataclass(frozen=True)

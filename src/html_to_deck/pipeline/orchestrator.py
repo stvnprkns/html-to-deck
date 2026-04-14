@@ -50,10 +50,10 @@ class HtmlToDeckPipeline:
         deck = DeckDocument(slides=slides, deck_type=storyline.deck_type, source_href=source_href)
         layouts = choose_layout_patterns(deck)
         designed = apply_design_rules(deck, layouts)
-        _issues = run_quality_checks(designed)
-        rendered = self.renderer.render(designed)
+        audit_report = run_quality_checks(designed)
+        rendered = self.renderer.render(designed, audit_report=audit_report)
         final_path = write_output(rendered, output_path)
-        return PipelineOutput(output_path=final_path)
+        return PipelineOutput(output_path=final_path, audit_report=audit_report)
 
     @staticmethod
     def _resolve_source_href(pipeline_input: PipelineInput) -> str | None:

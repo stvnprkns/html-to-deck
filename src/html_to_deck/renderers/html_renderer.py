@@ -5,7 +5,8 @@ from __future__ import annotations
 import json
 from html import escape
 
-from ..schema.ir import DeckDocument, Slide
+from ..audit import AuditReport
+from ..schema.ir import DeckDocument
 
 _BASE_CSS = """
 :root {
@@ -90,6 +91,13 @@ button:hover { border-color: var(--accent); }
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 .meta { font-size: .9rem; color: var(--muted); min-width: 5rem; text-align: right; }
+.audit-badge {
+  font-size: .8rem;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: .28rem .55rem;
+}
 .source-link {
   display: inline-flex;
   align-items: center;
@@ -162,10 +170,11 @@ _BASE_JS = """
 class HtmlDeckRenderer:
     """Render a DeckDocument into a standalone interactive HTML slideshow."""
 
-    def render(self, deck: DeckDocument) -> str:
-        slide_markup = "\n".join(self._render_slide(idx, slide) for idx, slide in enumerate(deck.slides, start=1))
+    def render(self, deck: DeckDocument, audit_report: AuditReport | None = None) -> str:
+        slide_markup = "\n".join(self._render_slide(idx, slide.title, slide.bullets) for idx, slide in enumerate(deck.slides, start=1))
         title = escape(deck.slides[0].title if deck.slides else "Generated Deck")
         source_link_markup = self._render_source_link(deck.source_href)
+        audit_markup = self._render_audit_summary(audit_report)
 
         return f"""<!doctype html>
 <html lang=\"en\">
@@ -183,6 +192,7 @@ class HtmlDeckRenderer:
       <button type=\"button\" data-next aria-label=\"Next slide\">Next ▶</button>
       <div class=\"progress\" aria-hidden=\"true\"><div data-progress></div></div>
       {source_link_markup}
+      {audit_markup}
       <div class=\"meta\" data-counter>0 / 0</div>
     </footer>
   </main>
@@ -223,6 +233,12 @@ class HtmlDeckRenderer:
             f"<section class=\"slide-inner\"><h1>{escape(slide.title)}</h1>{body_markup}<ul>{items}</ul>{notes_markup}{evidence_markup}{source_refs_markup}{metadata_markup}{meta_markup}</section>"
             "</article>"
         )
+
+    @staticmethod
+    def _render_audit_summary(audit_report: AuditReport | None) -> str:
+        if audit_report is None:
+            return ""
+        return f'<div class="audit-badge" data-audit-summary>{escape(audit_report.summary_line)}</div>'
 
     @staticmethod
     def _render_source_link(source_href: str | None) -> str:
