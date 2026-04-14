@@ -197,6 +197,32 @@ def audit_deck(designed: dict[str, Any]) -> dict[str, Any]:
             issues.append({"slide_id": slide["id"], "severity": "warning", "rule": "title-length"})
         if not slide.get("body"):
             issues.append({"slide_id": slide["id"], "severity": "warning", "rule": "empty-body"})
+        metadata = slide.get("body_metadata", {})
+        block_type = str(metadata.get("block_type", "")).lower()
+        visual_intent = str(metadata.get("visual_intent", "")).lower()
+        diagram_source = str(metadata.get("diagram_source", "")).lower()
+        is_diagram_intent = visual_intent == "diagram" or bool(metadata.get("diagram_intent"))
+        uses_image_like_block = block_type in {
+            "image",
+            "image_with_caption",
+            "figure",
+            "diagram_image",
+            "screenshot",
+        }
+        has_explicit_exception = bool(metadata.get("diagram_exception"))
+        is_code_spec_diagram = diagram_source in {"code_spec", "code-spec", "dsl"}
+        if is_diagram_intent and uses_image_like_block and not has_explicit_exception and not is_code_spec_diagram:
+            issues.append(
+                {
+                    "slide_id": slide["id"],
+                    "severity": "error",
+                    "rule": "diagram_should_be_code",
+                    "message": (
+                        "Diagram intent should use a code spec; set body_metadata.diagram_exception=true "
+                        "for explicit waivers."
+                    ),
+                }
+            )
 
     return {
         "stage": "audit",

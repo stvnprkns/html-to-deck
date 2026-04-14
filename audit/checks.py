@@ -3,6 +3,13 @@ from __future__ import annotations
 from .models import AuditWarning, DeckSpec
 
 _MAX_TEXT_WORDS = 110
+_IMAGE_LIKE_BLOCK_TYPES = {
+    "image",
+    "image_with_caption",
+    "figure",
+    "diagram_image",
+    "screenshot",
+}
 
 
 def run_all_checks(deck: DeckSpec) -> list[AuditWarning]:
@@ -12,6 +19,7 @@ def run_all_checks(deck: DeckSpec) -> list[AuditWarning]:
     warnings.extend(_check_title_takeaway_alignment(deck))
     warnings.extend(_check_evidence_and_provenance(deck))
     warnings.extend(_check_pattern_rhythm(deck))
+    warnings.extend(_check_diagram_should_be_code(deck))
     return warnings
 
 
@@ -106,4 +114,33 @@ def _check_pattern_rhythm(deck: DeckSpec) -> list[AuditWarning]:
                 )
             )
         previous = slide.pattern_signature
+    return out
+
+
+def _check_diagram_should_be_code(deck: DeckSpec) -> list[AuditWarning]:
+    out: list[AuditWarning] = []
+    for slide in deck.slides:
+        metadata = slide.body_metadata
+        block_type = str(metadata.get("block_type", "")).lower()
+        visual_intent = str(metadata.get("visual_intent", "")).lower()
+        diagram_source = str(metadata.get("diagram_source", "")).lower()
+
+        is_diagram_intent = visual_intent == "diagram" or bool(metadata.get("diagram_intent"))
+        uses_image_like_block = block_type in _IMAGE_LIKE_BLOCK_TYPES
+        has_explicit_exception = bool(metadata.get("diagram_exception"))
+        is_code_spec_diagram = diagram_source in {"code_spec", "code-spec", "dsl"}
+
+        if is_diagram_intent and uses_image_like_block and not is_code_spec_diagram and not has_explicit_exception:
+            out.append(
+                AuditWarning(
+                    slide_id=slide.id,
+                    check="diagram_should_be_code",
+                    severity="high",
+                    confidence=0.91,
+                    actionable=(
+                        "Use a code-spec diagram (or add body_metadata.diagram_exception=true "
+                        "with justification) instead of an image-backed diagram."
+                    ),
+                )
+            )
     return out

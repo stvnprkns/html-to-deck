@@ -30,6 +30,13 @@
       "slide_id": "s3"
     },
     {
+      "actionable": "Rewrite title to mirror the core takeaway using shared keywords.",
+      "check": "weak_title_takeaway_alignment",
+      "confidence": 0.73,
+      "severity": "medium",
+      "slide_id": "s4"
+    },
+    {
       "actionable": "Attach evidence and citation provenance for each explicit claim.",
       "check": "missing_evidence_or_provenance",
       "confidence": 0.94,
@@ -41,6 +48,13 @@
       "check": "inconsistent_pattern_rhythm",
       "confidence": 0.77,
       "severity": "low",
+      "slide_id": "s3"
+    },
+    {
+      "actionable": "Use a code-spec diagram (or add body_metadata.diagram_exception=true with justification) instead of an image-backed diagram.",
+      "check": "diagram_should_be_code",
+      "confidence": 0.91,
+      "severity": "high",
       "slide_id": "s3"
     }
   ]
