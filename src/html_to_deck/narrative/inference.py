@@ -15,5 +15,13 @@ class Storyline:
 
 def infer_storyline(blocks: list[ContentBlock]) -> Storyline:
     if not blocks:
-        return Storyline(deck_type="empty", narrative_arc="none")
-    return Storyline(deck_type="summary", narrative_arc="linear")
+        return Storyline(deck_type="empty", narrative_arc="No source content available")
+
+    corpus = " ".join(block.text.lower() for block in blocks)
+    if "case study" in corpus or "challenge" in corpus or "outcome" in corpus:
+        return Storyline(deck_type="case_study", narrative_arc="challenge → intervention → outcome")
+    if "report" in corpus or "highlights" in corpus or "risks" in corpus:
+        return Storyline(deck_type="report_summary", narrative_arc="performance → highlights → risks")
+    if "problem" in corpus and "solution" in corpus:
+        return Storyline(deck_type="landing_page_narrative", narrative_arc="problem → solution → proof")
+    return Storyline(deck_type="article_story", narrative_arc="context → turning point → takeaway")

@@ -2,10 +2,17 @@
 
 from __future__ import annotations
 
+from ..pipeline.stages import design_stage
 from ..schema.ir import DeckDocument
 
 
 def apply_design_rules(deck: DeckDocument, layouts: dict[int, str]) -> DeckDocument:
-    """Placeholder that returns schema deck untouched for now."""
-    _ = layouts
-    return deck
+    """Apply visual design while honoring layout selections."""
+    deck_with_layouts = DeckDocument(
+        slides=deck.slides,
+        deck_type=deck.deck_type,
+        source_href=deck.source_href,
+        layouts=layouts,
+        audit_issues=deck.audit_issues,
+    )
+    return design_stage(deck_with_layouts)

@@ -17,9 +17,12 @@ class JsonDeckRenderer:
                         "intent": slide.intent.value,
                         "title": slide.title,
                         "bullets": slide.bullets,
+                        "metadata": slide.metadata,
                     }
                     for slide in deck.slides
                 ],
+                "layouts": {str(idx): pattern for idx, pattern in deck.layouts.items()},
+                "audit": {"issue_count": len(deck.audit_issues), "issues": deck.audit_issues},
             },
             indent=2,
         )

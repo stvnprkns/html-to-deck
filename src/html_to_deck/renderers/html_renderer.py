@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from html import escape
+import json
 
 from ..schema.ir import DeckDocument
 
@@ -158,9 +159,13 @@ class HtmlDeckRenderer:
     """Render a DeckDocument into a standalone interactive HTML slideshow."""
 
     def render(self, deck: DeckDocument) -> str:
-        slide_markup = "\n".join(self._render_slide(idx, slide.title, slide.bullets) for idx, slide in enumerate(deck.slides, start=1))
+        slide_markup = "\n".join(
+            self._render_slide(idx, slide.title, slide.bullets, slide.metadata)
+            for idx, slide in enumerate(deck.slides, start=1)
+        )
         title = escape(deck.slides[0].title if deck.slides else "Generated Deck")
         source_link_markup = self._render_source_link(deck.source_href)
+        audit_payload = escape(json.dumps({"issue_count": len(deck.audit_issues), "issues": deck.audit_issues}))
 
         return f"""<!doctype html>
 <html lang=\"en\">
@@ -181,16 +186,19 @@ class HtmlDeckRenderer:
       <div class=\"meta\" data-counter>0 / 0</div>
     </footer>
   </main>
+  <script type="application/json" id="deck-audit">{audit_payload}</script>
   <script>{_BASE_JS}</script>
 </body>
 </html>
 """
 
     @staticmethod
-    def _render_slide(index: int, title: str, bullets: list[str]) -> str:
+    def _render_slide(index: int, title: str, bullets: list[str], metadata: dict[str, str] | None = None) -> str:
         items = "\n".join(f"<li>{escape(bullet)}</li>" for bullet in bullets) if bullets else "<li>No bullet content extracted.</li>"
+        data_layout = (metadata or {}).get("layout")
+        layout_attr = f" data-layout=\"{escape(data_layout, quote=True)}\"" if data_layout else ""
         return (
-            f"<article class=\"slide\" id=\"slide-{index}\">"
+            f"<article class=\"slide\" id=\"slide-{index}\"{layout_attr}>"
             f"<section class=\"slide-inner\"><h1>{escape(title)}</h1><ul>{items}</ul></section>"
             "</article>"
         )
