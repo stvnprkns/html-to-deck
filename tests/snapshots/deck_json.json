@@ -1,0 +1,158 @@
+{
+  "article-story": {
+    "audit": {
+      "fixture_id": "article-story",
+      "issue_count": 0,
+      "issues": [],
+      "ok": true,
+      "stage": "audit"
+    },
+    "deck_version": "v1",
+    "fixture_id": "article-story",
+    "slides": [
+      {
+        "body": "Vacant lots transformed into productive gardens in less than two years.",
+        "id": "slide-1",
+        "kind": "title",
+        "layout": "hero",
+        "theme": "v1-light",
+        "title": "How Urban Farms Rebuilt Community"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-2",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Background"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-3",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Turning Point"
+      }
+    ]
+  },
+  "case-study": {
+    "audit": {
+      "fixture_id": "case-study",
+      "issue_count": 0,
+      "issues": [],
+      "ok": true,
+      "stage": "audit"
+    },
+    "deck_version": "v1",
+    "fixture_id": "case-study",
+    "slides": [
+      {
+        "body": "A B2B SaaS company redesigned first-run tasks and support messaging.",
+        "id": "slide-1",
+        "kind": "title",
+        "layout": "hero",
+        "theme": "v1-light",
+        "title": "Reducing Onboarding Time by 35%"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-2",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Challenge"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-3",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Outcome"
+      }
+    ]
+  },
+  "landing-page-narrative": {
+    "audit": {
+      "fixture_id": "landing-page-narrative",
+      "issue_count": 0,
+      "issues": [],
+      "ok": true,
+      "stage": "audit"
+    },
+    "deck_version": "v1",
+    "fixture_id": "landing-page-narrative",
+    "slides": [
+      {
+        "body": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+        "id": "slide-1",
+        "kind": "title",
+        "layout": "hero",
+        "theme": "v1-light",
+        "title": "Meet Nimbus: Your Team's Second Brain"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-2",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Problem"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-3",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Solution"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-4",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Proof"
+      }
+    ]
+  },
+  "report-summary": {
+    "audit": {
+      "fixture_id": "report-summary",
+      "issue_count": 0,
+      "issues": [],
+      "ok": true,
+      "stage": "audit"
+    },
+    "deck_version": "v1",
+    "fixture_id": "report-summary",
+    "slides": [
+      {
+        "body": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+        "id": "slide-1",
+        "kind": "title",
+        "layout": "hero",
+        "theme": "v1-light",
+        "title": "Q4 Report Summary"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-2",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Highlights"
+      },
+      {
+        "body": "Narrative intent: inform",
+        "id": "slide-3",
+        "kind": "content",
+        "layout": "two-column",
+        "theme": "v1-light",
+        "title": "Risks"
+      }
+    ]
+  }
+}
