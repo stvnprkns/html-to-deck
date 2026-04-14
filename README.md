@@ -55,6 +55,12 @@ PYTHONPATH=src python -m html_to_deck_v1 fixtures/html/report-summary.html
 
 The command prints the final JSON deck spec.
 
+Generate an interactive HTML deck viewer (keyboard + touch navigation):
+
+```bash
+PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html
+```
+
 ## Running tests
 
 ```bash

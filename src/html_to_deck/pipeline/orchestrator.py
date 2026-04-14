@@ -12,7 +12,7 @@ from ..ingest import load_html, normalize_snapshot
 from ..io import write_output
 from ..layout import choose_layout_patterns
 from ..narrative import infer_storyline
-from ..renderers import JsonDeckRenderer
+from ..renderers import HtmlDeckRenderer, JsonDeckRenderer
 from ..schema.ir import DeckDocument, Slide, SlideIntent
 from ..types import PipelineInput, PipelineOutput, SupportsRender
 
@@ -23,6 +23,12 @@ class HtmlToDeckPipeline:
 
     @classmethod
     def default(cls) -> "HtmlToDeckPipeline":
+        return cls(renderer=JsonDeckRenderer())
+
+    @classmethod
+    def from_output_path(cls, output_path: Path) -> "HtmlToDeckPipeline":
+        if output_path.suffix.lower() in {".html", ".htm"}:
+            return cls(renderer=HtmlDeckRenderer())
         return cls(renderer=JsonDeckRenderer())
 
     def run(self, pipeline_input: PipelineInput, output_path: Path) -> PipelineOutput:
