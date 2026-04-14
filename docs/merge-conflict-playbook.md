@@ -34,7 +34,7 @@ you may see conflicts around `__init__.py` exports or import wiring.
 ## Why this should conflict less now
 
 The repository configures Git's `union` merge strategy for
-`src/html_to_deck/**/__init__.py` in `.gitattributes`, which helps when both
+`src/html_to_deck/__init__.py` in `.gitattributes`, which helps when both
 branches append exports/imports in package entry points.
 
 > Note: `union` can keep duplicate lines. If that happens, quickly deduplicate

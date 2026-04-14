@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..schema.models import DeckDocument
+from ..schema.ir import DeckDocument
 
 
 def apply_design_rules(deck: DeckDocument, layouts: dict[int, str]) -> DeckDocument:

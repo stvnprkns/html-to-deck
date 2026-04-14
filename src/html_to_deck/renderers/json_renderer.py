@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import json
 
-from ..schema.models import DeckDocument
+from ..schema.ir import DeckDocument
 
 
 class JsonDeckRenderer:

@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..schema.models import DeckDocument
+from ..schema.ir import DeckDocument
 
 
 def choose_layout_patterns(deck: DeckDocument) -> dict[int, str]:

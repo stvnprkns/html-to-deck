@@ -13,7 +13,7 @@ from ..io import write_output
 from ..layout import choose_layout_patterns
 from ..narrative import infer_storyline
 from ..renderers import JsonDeckRenderer
-from ..schema.models import DeckDocument, Slide, SlideIntent
+from ..schema.ir import DeckDocument, Slide, SlideIntent
 from ..types import PipelineInput, PipelineOutput, SupportsRender
 
 

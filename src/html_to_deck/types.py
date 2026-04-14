@@ -33,4 +33,4 @@ class SupportsRender(Protocol):
 
 
 # Imported at bottom to avoid circular import at runtime/type checking.
-from .schema.models import DeckDocument
+from .schema.ir import DeckDocument

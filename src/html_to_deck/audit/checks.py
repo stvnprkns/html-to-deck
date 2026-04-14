@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from ..schema.models import DeckDocument
+from ..schema.ir import DeckDocument
 
 
 def run_quality_checks(deck: DeckDocument) -> list[str]:
