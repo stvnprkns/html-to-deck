@@ -1,0 +1,21 @@
+{
+  "metadata": {
+    "author": "example",
+    "theme": "default"
+  },
+  "slides": [
+    {
+      "blocks": [
+        {
+          "text": "Hello from html-to-deck",
+          "type": "paragraph"
+        }
+      ],
+      "id": "slide-1",
+      "notes": null,
+      "title": "Welcome"
+    }
+  ],
+  "title": "Minimal Sample Deck",
+  "version": "1.0"
+}
