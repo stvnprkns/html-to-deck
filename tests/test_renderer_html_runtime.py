@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from pathlib import Path
 
+from html_to_deck.audit import AuditReport
 from html_to_deck.pipeline.orchestrator import HtmlToDeckPipeline
 from html_to_deck.renderers import HtmlDeckRenderer, JsonDeckRenderer
 from html_to_deck.schema.ir import DeckDocument, Slide, SlideIntent
@@ -18,7 +19,7 @@ def test_html_renderer_outputs_runtime_controls() -> None:
         ],
     )
 
-    html = HtmlDeckRenderer().render(deck)
+    html = HtmlDeckRenderer().render(deck, AuditReport(warnings=[]))
 
     assert "<article class=\"slide\" id=\"slide-1\">" in html
     assert "data-next" in html
@@ -26,6 +27,7 @@ def test_html_renderer_outputs_runtime_controls() -> None:
     assert "ArrowRight" in html
     assert "data-source-link" in html
     assert "🔗" in html
+    assert "data-audit-summary" in html
 
 
 def test_pipeline_from_output_path_selects_html_renderer() -> None:

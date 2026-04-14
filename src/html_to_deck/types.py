@@ -6,6 +6,8 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Protocol
 
+from .audit import AuditReport
+
 
 @dataclass(frozen=True)
 class PipelineInput:
@@ -20,6 +22,7 @@ class PipelineOutput:
     """Pipeline result metadata."""
 
     output_path: Path
+    audit_report: AuditReport
 
 
 class SupportsRender(Protocol):
@@ -28,7 +31,7 @@ class SupportsRender(Protocol):
     Renderers should only consume canonical schema models.
     """
 
-    def render(self, deck: "DeckDocument") -> str:
+    def render(self, deck: "DeckDocument", audit_report: AuditReport | None = None) -> str:
         """Return target-specific serialized output."""
 
 

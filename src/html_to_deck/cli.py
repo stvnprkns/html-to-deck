@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import argparse
+import json
 from pathlib import Path
 
 from .pipeline.orchestrator import HtmlToDeckPipeline
@@ -19,7 +20,26 @@ def build_parser() -> argparse.ArgumentParser:
         default="auto",
         help="Renderer format. auto infers from output extension.",
     )
+    parser.add_argument(
+        "--audit-output",
+        choices=("summary", "json", "none"),
+        default="summary",
+        help="Emit audit report as summary or JSON in stdout.",
+    )
     return parser
+
+
+def _format_audit_summary(audit_payload: dict[str, object]) -> str:
+    counts = audit_payload["counts_by_severity"]
+    assert isinstance(counts, dict)
+    status = "BLOCKERS" if audit_payload["has_blockers"] else "OK"
+    return (
+        f"audit={status} "
+        f"critical={counts.get('critical', 0)} "
+        f"high={counts.get('high', 0)} "
+        f"medium={counts.get('medium', 0)} "
+        f"low={counts.get('low', 0)}"
+    )
 
 
 def main() -> int:
@@ -36,6 +56,13 @@ def main() -> int:
 
     result = pipeline.run(PipelineInput(source=Path(args.input), is_file=True), output_path)
     print(result.output_path)
+
+    audit_payload = result.audit_report.to_dict()
+    if args.audit_output == "summary":
+        print(_format_audit_summary(audit_payload))
+    elif args.audit_output == "json":
+        print(json.dumps(audit_payload, sort_keys=True))
+
     return 0
 
 
