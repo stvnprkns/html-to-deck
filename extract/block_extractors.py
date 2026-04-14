@@ -19,11 +19,14 @@ EXTRACTOR_RULES: tuple[ExtractorRule, ...] = (
     ExtractorRule("quote", re.compile(r"^>\s+(.+)$"), 0.95),
     ExtractorRule("unordered_list", re.compile(r"^\s*[-*+]\s+(.+)$"), 0.92),
     ExtractorRule("ordered_list", re.compile(r"^\s*\d+[.)]\s+(.+)$"), 0.92),
-    ExtractorRule("image", re.compile(r"!\[(.*?)\]\((.*?)\)"), 0.96),
     ExtractorRule("key_stat", re.compile(r"^(.*?)(\d[\d,.]*\s?[%$xX]?)\s*$"), 0.75),
 )
 
 TABLE_ROW_RE = re.compile(r"^\|(.+)\|$")
+FENCED_BLOCK_START_RE = re.compile(r"^```(?P<language>[a-zA-Z0-9_-]+)?\s*$")
+IMAGE_LINE_RE = re.compile(r"^!\[(?P<alt>.*?)\]\((?P<src>.*?)\)$")
+DIAGRAM_LANGUAGES = {"mermaid", "graphviz", "dot", "plantuml", "pikchr"}
+DIAGRAM_PREFIXES = ("graph ", "flowchart ", "sequencediagram", "classdiagram", "statediagram")
 
 
 def _normalize_source(source: str | dict) -> list[str]:
@@ -62,6 +65,42 @@ def _extract_table_block(lines: list[str], index: int) -> tuple[SourceBlock | No
     return block, j - 1
 
 
+def _extract_fenced_block(lines: list[str], index: int) -> tuple[SourceBlock | None, int]:
+    match = FENCED_BLOCK_START_RE.match(lines[index].strip())
+    if not match:
+        return None, index
+
+    language = (match.group("language") or "").lower()
+    content: list[str] = []
+    j = index + 1
+    while j < len(lines):
+        if lines[j].strip() == "```":
+            break
+        content.append(lines[j])
+        j += 1
+
+    if j >= len(lines) or lines[j].strip() != "```":
+        return None, index
+
+    normalized_content = "\n".join(content).strip()
+    leading_content = normalized_content.lower()
+    is_diagram_block = language in DIAGRAM_LANGUAGES or leading_content.startswith(DIAGRAM_PREFIXES)
+    if not is_diagram_block:
+        return None, index
+
+    block = SourceBlock(
+        block_type="diagram_spec",
+        text=normalized_content,
+        confidence=0.97,
+        metadata={
+            "diagram_language": language or "unknown",
+            "source_format": "fenced_code",
+            "audit_tag": "diagram_spec",
+        },
+    )
+    return block, j
+
+
 def extract_blocks(source: str | dict) -> list[SourceBlock]:
     """Extract semantic blocks from source markdown-like content."""
 
@@ -93,6 +132,32 @@ def extract_blocks(source: str | dict) -> list[SourceBlock]:
             i = table_end + 1
             continue
 
+        fenced_block, fenced_end = _extract_fenced_block(lines, i)
+        if fenced_block:
+            flush_paragraph()
+            blocks.append(fenced_block)
+            i = fenced_end + 1
+            continue
+
+        image_hit = IMAGE_LINE_RE.fullmatch(line)
+        if image_hit:
+            flush_paragraph()
+            blocks.append(
+                SourceBlock(
+                    block_type="warning",
+                    text=line,
+                    confidence=0.91,
+                    metadata={
+                        "audit_tag": "reject_external_image_reference",
+                        "reason": "external_image_reference",
+                        "src": image_hit.group("src"),
+                        "alt_text": image_hit.group("alt") or "Image",
+                    },
+                )
+            )
+            i += 1
+            continue
+
         matched = False
         for rule in EXTRACTOR_RULES:
             hit = rule.pattern.match(line)
@@ -108,9 +173,6 @@ def extract_blocks(source: str | dict) -> list[SourceBlock]:
                 text = hit.group(2)
             elif rule.block_type in {"unordered_list", "ordered_list", "quote"}:
                 text = hit.group(1)
-            elif rule.block_type == "image":
-                text = hit.group(1) or "Image"
-                metadata["src"] = hit.group(2)
             elif rule.block_type == "key_stat":
                 metric_name, metric_value = hit.group(1).strip(), hit.group(2).strip()
                 if metric_name and any(token in metric_name.lower() for token in ("growth", "revenue", "users", "cost", "margin", "rate")):
