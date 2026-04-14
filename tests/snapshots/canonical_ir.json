@@ -1,0 +1,526 @@
+{
+  "article-story": {
+    "design": {
+      "fixture_id": "article-story",
+      "slides": [
+        {
+          "body": "Vacant lots transformed into productive gardens in less than two years.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "theme": "v1-light",
+          "title": "How Urban Farms Rebuilt Community"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Background"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Turning Point"
+        }
+      ],
+      "stage": "design"
+    },
+    "extracted": {
+      "content": {
+        "bullets": [],
+        "paragraphs": [
+          "Vacant lots transformed into productive gardens in less than two years.",
+          "Local residents partnered with civic organizations for micro-grants.",
+          "A heat wave made food deserts visible and accelerated participation."
+        ]
+      },
+      "fixture_id": "article-story",
+      "meta": {
+        "primary_heading": "How Urban Farms Rebuilt Community",
+        "section_headings": [
+          "Background",
+          "Turning Point"
+        ],
+        "title": "Inside the Urban Farming Revival"
+      },
+      "stage": "extract"
+    },
+    "layout": {
+      "fixture_id": "article-story",
+      "slides": [
+        {
+          "body": "Vacant lots transformed into productive gardens in less than two years.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "title": "How Urban Farms Rebuilt Community"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Background"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Turning Point"
+        }
+      ],
+      "stage": "layout"
+    },
+    "mapping": {
+      "fixture_id": "article-story",
+      "slides": [
+        {
+          "body": "Vacant lots transformed into productive gardens in less than two years.",
+          "id": "slide-1",
+          "kind": "title",
+          "title": "How Urban Farms Rebuilt Community"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "title": "Background"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "title": "Turning Point"
+        }
+      ],
+      "stage": "mapping"
+    },
+    "narrative": {
+      "fixture_id": "article-story",
+      "stage": "narrative",
+      "story": {
+        "beats": [
+          {
+            "id": "beat-1",
+            "intent": "inform",
+            "label": "Background"
+          },
+          {
+            "id": "beat-2",
+            "intent": "inform",
+            "label": "Turning Point"
+          }
+        ],
+        "summary": "Vacant lots transformed into productive gardens in less than two years.",
+        "title": "How Urban Farms Rebuilt Community"
+      }
+    }
+  },
+  "case-study": {
+    "design": {
+      "fixture_id": "case-study",
+      "slides": [
+        {
+          "body": "A B2B SaaS company redesigned first-run tasks and support messaging.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "theme": "v1-light",
+          "title": "Reducing Onboarding Time by 35%"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Challenge"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Outcome"
+        }
+      ],
+      "stage": "design"
+    },
+    "extracted": {
+      "content": {
+        "bullets": [
+          "Activation improved from 48% to 67%",
+          "Support tickets decreased by 22%"
+        ],
+        "paragraphs": [
+          "A B2B SaaS company redesigned first-run tasks and support messaging.",
+          "Users stalled in account setup after configuration complexity increased."
+        ]
+      },
+      "fixture_id": "case-study",
+      "meta": {
+        "primary_heading": "Reducing Onboarding Time by 35%",
+        "section_headings": [
+          "Challenge",
+          "Outcome"
+        ],
+        "title": "Case Study: Onboarding Optimization"
+      },
+      "stage": "extract"
+    },
+    "layout": {
+      "fixture_id": "case-study",
+      "slides": [
+        {
+          "body": "A B2B SaaS company redesigned first-run tasks and support messaging.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "title": "Reducing Onboarding Time by 35%"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Challenge"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Outcome"
+        }
+      ],
+      "stage": "layout"
+    },
+    "mapping": {
+      "fixture_id": "case-study",
+      "slides": [
+        {
+          "body": "A B2B SaaS company redesigned first-run tasks and support messaging.",
+          "id": "slide-1",
+          "kind": "title",
+          "title": "Reducing Onboarding Time by 35%"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "title": "Challenge"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "title": "Outcome"
+        }
+      ],
+      "stage": "mapping"
+    },
+    "narrative": {
+      "fixture_id": "case-study",
+      "stage": "narrative",
+      "story": {
+        "beats": [
+          {
+            "id": "beat-1",
+            "intent": "inform",
+            "label": "Challenge"
+          },
+          {
+            "id": "beat-2",
+            "intent": "inform",
+            "label": "Outcome"
+          }
+        ],
+        "summary": "A B2B SaaS company redesigned first-run tasks and support messaging.",
+        "title": "Reducing Onboarding Time by 35%"
+      }
+    }
+  },
+  "landing-page-narrative": {
+    "design": {
+      "fixture_id": "landing-page-narrative",
+      "slides": [
+        {
+          "body": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "theme": "v1-light",
+          "title": "Meet Nimbus: Your Team's Second Brain"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Problem"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Solution"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-4",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Proof"
+        }
+      ],
+      "stage": "design"
+    },
+    "extracted": {
+      "content": {
+        "bullets": [],
+        "paragraphs": [
+          "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+          "Knowledge is fragmented across tools, leading to repeated work.",
+          "Context-aware retrieval and action suggestions keep teams aligned.",
+          "Pilot customers reduced time-to-answer by 41 percent."
+        ]
+      },
+      "fixture_id": "landing-page-narrative",
+      "meta": {
+        "primary_heading": "Meet Nimbus: Your Team's Second Brain",
+        "section_headings": [
+          "Problem",
+          "Solution",
+          "Proof"
+        ],
+        "title": "Launch Narrative for Nimbus AI"
+      },
+      "stage": "extract"
+    },
+    "layout": {
+      "fixture_id": "landing-page-narrative",
+      "slides": [
+        {
+          "body": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "title": "Meet Nimbus: Your Team's Second Brain"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Problem"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Solution"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-4",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Proof"
+        }
+      ],
+      "stage": "layout"
+    },
+    "mapping": {
+      "fixture_id": "landing-page-narrative",
+      "slides": [
+        {
+          "body": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+          "id": "slide-1",
+          "kind": "title",
+          "title": "Meet Nimbus: Your Team's Second Brain"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "title": "Problem"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "title": "Solution"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-4",
+          "kind": "content",
+          "title": "Proof"
+        }
+      ],
+      "stage": "mapping"
+    },
+    "narrative": {
+      "fixture_id": "landing-page-narrative",
+      "stage": "narrative",
+      "story": {
+        "beats": [
+          {
+            "id": "beat-1",
+            "intent": "inform",
+            "label": "Problem"
+          },
+          {
+            "id": "beat-2",
+            "intent": "inform",
+            "label": "Solution"
+          },
+          {
+            "id": "beat-3",
+            "intent": "inform",
+            "label": "Proof"
+          }
+        ],
+        "summary": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
+        "title": "Meet Nimbus: Your Team's Second Brain"
+      }
+    }
+  },
+  "report-summary": {
+    "design": {
+      "fixture_id": "report-summary",
+      "slides": [
+        {
+          "body": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "theme": "v1-light",
+          "title": "Q4 Report Summary"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Highlights"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "theme": "v1-light",
+          "title": "Risks"
+        }
+      ],
+      "stage": "design"
+    },
+    "extracted": {
+      "content": {
+        "bullets": [
+          "ARR reached $12.4M",
+          "Gross retention improved to 94%"
+        ],
+        "paragraphs": [
+          "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+          "Hiring pipeline for senior engineering remains constrained in core regions."
+        ]
+      },
+      "fixture_id": "report-summary",
+      "meta": {
+        "primary_heading": "Q4 Report Summary",
+        "section_headings": [
+          "Highlights",
+          "Risks"
+        ],
+        "title": "Q4 Business Report Summary"
+      },
+      "stage": "extract"
+    },
+    "layout": {
+      "fixture_id": "report-summary",
+      "slides": [
+        {
+          "body": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+          "id": "slide-1",
+          "kind": "title",
+          "layout": "hero",
+          "title": "Q4 Report Summary"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Highlights"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "layout": "two-column",
+          "title": "Risks"
+        }
+      ],
+      "stage": "layout"
+    },
+    "mapping": {
+      "fixture_id": "report-summary",
+      "slides": [
+        {
+          "body": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+          "id": "slide-1",
+          "kind": "title",
+          "title": "Q4 Report Summary"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-2",
+          "kind": "content",
+          "title": "Highlights"
+        },
+        {
+          "body": "Narrative intent: inform",
+          "id": "slide-3",
+          "kind": "content",
+          "title": "Risks"
+        }
+      ],
+      "stage": "mapping"
+    },
+    "narrative": {
+      "fixture_id": "report-summary",
+      "stage": "narrative",
+      "story": {
+        "beats": [
+          {
+            "id": "beat-1",
+            "intent": "inform",
+            "label": "Highlights"
+          },
+          {
+            "id": "beat-2",
+            "intent": "inform",
+            "label": "Risks"
+          }
+        ],
+        "summary": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
+        "title": "Q4 Report Summary"
+      }
+    }
+  }
+}

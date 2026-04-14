@@ -1,0 +1,30 @@
+{
+  "article-story": {
+    "fixture_id": "article-story",
+    "issue_count": 0,
+    "issues": [],
+    "ok": true,
+    "stage": "audit"
+  },
+  "case-study": {
+    "fixture_id": "case-study",
+    "issue_count": 0,
+    "issues": [],
+    "ok": true,
+    "stage": "audit"
+  },
+  "landing-page-narrative": {
+    "fixture_id": "landing-page-narrative",
+    "issue_count": 0,
+    "issues": [],
+    "ok": true,
+    "stage": "audit"
+  },
+  "report-summary": {
+    "fixture_id": "report-summary",
+    "issue_count": 0,
+    "issues": [],
+    "ok": true,
+    "stage": "audit"
+  }
+}
