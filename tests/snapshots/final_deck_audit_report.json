@@ -1,0 +1,47 @@
+{
+  "has_blockers": true,
+  "warnings": [
+    {
+      "actionable": "Trim to ~110 words or split this into two slides.",
+      "check": "too_much_text_per_slide",
+      "confidence": 0.88,
+      "severity": "medium",
+      "slide_id": "s1"
+    },
+    {
+      "actionable": "Use one primary communication job per slide (inform, persuade, decide, or align).",
+      "check": "mixed_communication_jobs",
+      "confidence": 0.86,
+      "severity": "high",
+      "slide_id": "s1"
+    },
+    {
+      "actionable": "Rewrite title to mirror the core takeaway using shared keywords.",
+      "check": "weak_title_takeaway_alignment",
+      "confidence": 0.73,
+      "severity": "medium",
+      "slide_id": "s2"
+    },
+    {
+      "actionable": "Rewrite title to mirror the core takeaway using shared keywords.",
+      "check": "weak_title_takeaway_alignment",
+      "confidence": 0.73,
+      "severity": "medium",
+      "slide_id": "s3"
+    },
+    {
+      "actionable": "Attach evidence and citation provenance for each explicit claim.",
+      "check": "missing_evidence_or_provenance",
+      "confidence": 0.94,
+      "severity": "critical",
+      "slide_id": "s2"
+    },
+    {
+      "actionable": "Introduce a variation in slide pattern rhythm every 2-3 slides.",
+      "check": "inconsistent_pattern_rhythm",
+      "confidence": 0.77,
+      "severity": "low",
+      "slide_id": "s3"
+    }
+  ]
+}
