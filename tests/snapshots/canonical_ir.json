@@ -8,6 +8,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "theme": "v1-light",
           "title": "How Urban Farms Rebuilt Community"
         },
@@ -16,6 +17,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Background"
         },
@@ -24,6 +26,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Turning Point"
         }
@@ -37,7 +40,12 @@
           "Vacant lots transformed into productive gardens in less than two years.",
           "Local residents partnered with civic organizations for micro-grants.",
           "A heat wave made food deserts visible and accelerated participation."
-        ]
+        ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        }
       },
       "fixture_id": "article-story",
       "meta": {
@@ -58,6 +66,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "title": "How Urban Farms Rebuilt Community"
         },
         {
@@ -65,6 +74,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Background"
         },
         {
@@ -72,6 +82,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Turning Point"
         }
       ],
@@ -84,18 +95,21 @@
           "body": "Vacant lots transformed into productive gardens in less than two years.",
           "id": "slide-1",
           "kind": "title",
+          "pattern": "hero",
           "title": "How Urban Farms Rebuilt Community"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-2",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Background"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-3",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Turning Point"
         }
       ],
@@ -117,6 +131,11 @@
             "label": "Turning Point"
           }
         ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        },
         "summary": "Vacant lots transformed into productive gardens in less than two years.",
         "title": "How Urban Farms Rebuilt Community"
       }
@@ -131,6 +150,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "theme": "v1-light",
           "title": "Reducing Onboarding Time by 35%"
         },
@@ -139,6 +159,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Challenge"
         },
@@ -147,6 +168,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Outcome"
         }
@@ -162,7 +184,12 @@
         "paragraphs": [
           "A B2B SaaS company redesigned first-run tasks and support messaging.",
           "Users stalled in account setup after configuration complexity increased."
-        ]
+        ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        }
       },
       "fixture_id": "case-study",
       "meta": {
@@ -183,6 +210,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "title": "Reducing Onboarding Time by 35%"
         },
         {
@@ -190,6 +218,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Challenge"
         },
         {
@@ -197,6 +226,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Outcome"
         }
       ],
@@ -209,18 +239,21 @@
           "body": "A B2B SaaS company redesigned first-run tasks and support messaging.",
           "id": "slide-1",
           "kind": "title",
+          "pattern": "hero",
           "title": "Reducing Onboarding Time by 35%"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-2",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Challenge"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-3",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Outcome"
         }
       ],
@@ -242,6 +275,11 @@
             "label": "Outcome"
           }
         ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        },
         "summary": "A B2B SaaS company redesigned first-run tasks and support messaging.",
         "title": "Reducing Onboarding Time by 35%"
       }
@@ -256,6 +294,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "theme": "v1-light",
           "title": "Meet Nimbus: Your Team's Second Brain"
         },
@@ -264,6 +303,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Problem"
         },
@@ -272,6 +312,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Solution"
         },
@@ -280,6 +321,7 @@
           "id": "slide-4",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Proof"
         }
@@ -294,7 +336,12 @@
           "Knowledge is fragmented across tools, leading to repeated work.",
           "Context-aware retrieval and action suggestions keep teams aligned.",
           "Pilot customers reduced time-to-answer by 41 percent."
-        ]
+        ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        }
       },
       "fixture_id": "landing-page-narrative",
       "meta": {
@@ -316,6 +363,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "title": "Meet Nimbus: Your Team's Second Brain"
         },
         {
@@ -323,6 +371,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Problem"
         },
         {
@@ -330,6 +379,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Solution"
         },
         {
@@ -337,6 +387,7 @@
           "id": "slide-4",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Proof"
         }
       ],
@@ -349,24 +400,28 @@
           "body": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
           "id": "slide-1",
           "kind": "title",
+          "pattern": "hero",
           "title": "Meet Nimbus: Your Team's Second Brain"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-2",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Problem"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-3",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Solution"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-4",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Proof"
         }
       ],
@@ -393,6 +448,11 @@
             "label": "Proof"
           }
         ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        },
         "summary": "Nimbus unifies docs, meetings, and workflows into a shared memory layer.",
         "title": "Meet Nimbus: Your Team's Second Brain"
       }
@@ -407,6 +467,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "theme": "v1-light",
           "title": "Q4 Report Summary"
         },
@@ -415,6 +476,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Highlights"
         },
@@ -423,6 +485,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "theme": "v1-light",
           "title": "Risks"
         }
@@ -438,7 +501,12 @@
         "paragraphs": [
           "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
           "Hiring pipeline for senior engineering remains constrained in core regions."
-        ]
+        ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        }
       },
       "fixture_id": "report-summary",
       "meta": {
@@ -459,6 +527,7 @@
           "id": "slide-1",
           "kind": "title",
           "layout": "hero",
+          "pattern": "hero",
           "title": "Q4 Report Summary"
         },
         {
@@ -466,6 +535,7 @@
           "id": "slide-2",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Highlights"
         },
         {
@@ -473,6 +543,7 @@
           "id": "slide-3",
           "kind": "content",
           "layout": "two-column",
+          "pattern": "two_column_comparison",
           "title": "Risks"
         }
       ],
@@ -485,18 +556,21 @@
           "body": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
           "id": "slide-1",
           "kind": "title",
+          "pattern": "hero",
           "title": "Q4 Report Summary"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-2",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Highlights"
         },
         {
           "body": "Narrative intent: inform",
           "id": "slide-3",
           "kind": "content",
+          "pattern": "two_column_comparison",
           "title": "Risks"
         }
       ],
@@ -518,6 +592,11 @@
             "label": "Risks"
           }
         ],
+        "structured": {
+          "diagrams": [],
+          "stats": [],
+          "tables": []
+        },
         "summary": "Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.",
         "title": "Q4 Report Summary"
       }
