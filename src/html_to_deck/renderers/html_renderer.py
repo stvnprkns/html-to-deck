@@ -85,6 +85,19 @@ button:hover { border-color: var(--accent); }
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 .meta { font-size: .9rem; color: var(--muted); min-width: 5rem; text-align: right; }
+.source-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .35rem;
+  margin-left: auto;
+  color: var(--muted);
+  text-decoration: none;
+  font-size: .8rem;
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: .28rem .55rem;
+}
+.source-link:hover { color: var(--text); border-color: var(--accent); }
 """
 
 _BASE_JS = """
@@ -147,6 +160,7 @@ class HtmlDeckRenderer:
     def render(self, deck: DeckDocument) -> str:
         slide_markup = "\n".join(self._render_slide(idx, slide.title, slide.bullets) for idx, slide in enumerate(deck.slides, start=1))
         title = escape(deck.slides[0].title if deck.slides else "Generated Deck")
+        source_link_markup = self._render_source_link(deck.source_href)
 
         return f"""<!doctype html>
 <html lang=\"en\">
@@ -163,6 +177,7 @@ class HtmlDeckRenderer:
       <button type=\"button\" data-prev aria-label=\"Previous slide\">◀ Prev</button>
       <button type=\"button\" data-next aria-label=\"Next slide\">Next ▶</button>
       <div class=\"progress\" aria-hidden=\"true\"><div data-progress></div></div>
+      {source_link_markup}
       <div class=\"meta\" data-counter>0 / 0</div>
     </footer>
   </main>
@@ -178,4 +193,14 @@ class HtmlDeckRenderer:
             f"<article class=\"slide\" id=\"slide-{index}\">"
             f"<section class=\"slide-inner\"><h1>{escape(title)}</h1><ul>{items}</ul></section>"
             "</article>"
+        )
+
+    @staticmethod
+    def _render_source_link(source_href: str | None) -> str:
+        if not source_href:
+            return ""
+        safe_href = escape(source_href, quote=True)
+        return (
+            f"<a class=\"source-link\" data-source-link href=\"{safe_href}\" target=\"_blank\" rel=\"noopener noreferrer\">"
+            "<span aria-hidden=\"true\">🔗</span><span>Source</span></a>"
         )

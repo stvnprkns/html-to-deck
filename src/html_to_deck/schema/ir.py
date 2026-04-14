@@ -23,3 +23,4 @@ class Slide:
 class DeckDocument:
     slides: list[Slide]
     deck_type: str
+    source_href: str | None = None

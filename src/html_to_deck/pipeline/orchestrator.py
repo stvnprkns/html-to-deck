@@ -33,6 +33,7 @@ class HtmlToDeckPipeline:
 
     def run(self, pipeline_input: PipelineInput, output_path: Path) -> PipelineOutput:
         html = load_html(pipeline_input.source, is_file=pipeline_input.is_file)
+        source_href = self._resolve_source_href(pipeline_input)
         snapshot = normalize_snapshot(html)
         blocks = extract_blocks(snapshot)
         storyline = infer_storyline(blocks)
@@ -45,10 +46,19 @@ class HtmlToDeckPipeline:
             )
         ] if blocks else []
 
-        deck = DeckDocument(slides=slides, deck_type=storyline.deck_type)
+        deck = DeckDocument(slides=slides, deck_type=storyline.deck_type, source_href=source_href)
         layouts = choose_layout_patterns(deck)
         designed = apply_design_rules(deck, layouts)
         _issues = run_quality_checks(designed)
         rendered = self.renderer.render(designed)
         final_path = write_output(rendered, output_path)
         return PipelineOutput(output_path=final_path)
+
+    @staticmethod
+    def _resolve_source_href(pipeline_input: PipelineInput) -> str | None:
+        if pipeline_input.is_file:
+            return Path(pipeline_input.source).resolve().as_uri()
+        source = str(pipeline_input.source).strip()
+        if source.startswith(("http://", "https://")):
+            return source
+        return None
