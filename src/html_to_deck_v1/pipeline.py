@@ -81,6 +81,11 @@ def extract_content(ingested: dict[str, Any]) -> dict[str, Any]:
     doc: HtmlDocument = ingested["document"]
     parser = _SimpleHtmlExtractor()
     parser.feed(doc.html)
+    structured = {
+        "diagrams": re.findall(r'data-diagram(?:-type)?="([^"]+)"', doc.html, flags=re.IGNORECASE),
+        "tables": re.findall(r"<table(?:\\s|>)", doc.html, flags=re.IGNORECASE),
+        "stats": re.findall(r'data-stat(?:-value)?="([^"]+)"', doc.html, flags=re.IGNORECASE),
+    }
 
     extracted = {
         "stage": "extract",
@@ -93,6 +98,7 @@ def extract_content(ingested: dict[str, Any]) -> dict[str, Any]:
         "content": {
             "paragraphs": parser.paragraphs,
             "bullets": parser.bullets,
+            "structured": structured,
         },
     }
     return extracted
@@ -111,6 +117,7 @@ def build_narrative(extracted: dict[str, Any]) -> dict[str, Any]:
             "title": extracted["meta"]["primary_heading"] or extracted["meta"]["title"],
             "summary": extracted["content"]["paragraphs"][0] if extracted["content"]["paragraphs"] else "",
             "beats": beats,
+            "structured": extracted["content"].get("structured", {}),
         },
     }
 
@@ -121,19 +128,43 @@ def map_to_slides(narrative: dict[str, Any]) -> dict[str, Any]:
         {
             "id": "slide-1",
             "kind": "title",
+            "pattern": "hero",
             "title": story["title"],
             "body": story["summary"],
         }
     ]
-    for index, beat in enumerate(story["beats"], start=2):
+    index = 2
+    structured = story.get("structured", {})
+    visual_patterns = (
+        ("diagrams", "MERMAID_DIAGRAM", "diagram"),
+        ("tables", "TABLE_FROM_DATA", "table"),
+        ("stats", "CHART_FROM_SERIES", "stat"),
+    )
+    for key, pattern, label in visual_patterns:
+        entries = structured.get(key, [])
+        if entries:
+            slides.append(
+                {
+                    "id": f"slide-{index}",
+                    "kind": "content",
+                    "pattern": pattern,
+                    "title": f"{label.title()} View",
+                    "body": f"Code-rendered {label} slide from structured metadata.",
+                }
+            )
+            index += 1
+
+    for beat in story["beats"]:
         slides.append(
             {
                 "id": f"slide-{index}",
                 "kind": "content",
+                "pattern": "two_column_comparison",
                 "title": beat["label"],
                 "body": f"Narrative intent: {beat['intent']}",
             }
         )
+        index += 1
 
     return {"stage": "mapping", "fixture_id": narrative["fixture_id"], "slides": slides}
 
@@ -141,7 +172,15 @@ def map_to_slides(narrative: dict[str, Any]) -> dict[str, Any]:
 def apply_layout(mapping: dict[str, Any]) -> dict[str, Any]:
     out = []
     for slide in mapping["slides"]:
-        layout = "hero" if slide["kind"] == "title" else "two-column"
+        pattern = slide.get("pattern")
+        if pattern == "MERMAID_DIAGRAM":
+            layout = "code-mermaid"
+        elif pattern == "TABLE_FROM_DATA":
+            layout = "code-table"
+        elif pattern == "CHART_FROM_SERIES":
+            layout = "code-chart"
+        else:
+            layout = "hero" if slide["kind"] == "title" else "two-column"
         out.append({**slide, "layout": layout})
     return {"stage": "layout", "fixture_id": mapping["fixture_id"], "slides": out}
 

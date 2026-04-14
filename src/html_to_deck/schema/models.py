@@ -16,7 +16,11 @@ class DeckType(StrEnum):
 
 
 class SlidePattern(StrEnum):
-    """Supported slide-level pattern catalog."""
+    """Supported slide-level pattern catalog.
+
+    `IMAGE_WITH_CAPTION` is retained for backwards compatibility only and is
+    considered legacy/deprecated versus code-rendered visual patterns.
+    """
 
     HERO = "hero"
     SECTION_DIVIDER = "section_divider"
@@ -24,6 +28,10 @@ class SlidePattern(StrEnum):
     QUOTE = "quote"
     TWO_COLUMN_COMPARISON = "two_column_comparison"
     CHART_WITH_TAKEAWAY = "chart_with_takeaway"
+    MERMAID_DIAGRAM = "mermaid_diagram"
+    TABLE_FROM_DATA = "table_from_data"
+    CHART_FROM_SERIES = "chart_from_series"
+    # Legacy/deprecated: prefer MERMAID_DIAGRAM / TABLE_FROM_DATA / CHART_FROM_SERIES.
     IMAGE_WITH_CAPTION = "image_with_caption"
     TIMELINE = "timeline"
     CARDS_GRID = "cards_grid"
