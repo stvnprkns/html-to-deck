@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import build_narrative, extract_content, ingest_html, map_to_slides
+from html_to_deck.pipeline.v1_compat import build_narrative, extract_content, ingest_html, map_to_slides
 
 
 def test_mapping_stage_creates_slide_sequence(fixture_paths):

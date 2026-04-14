@@ -1,7 +1,7 @@
 from pathlib import Path
 import sys
 
-from html_to_deck_v1.pipeline import extract_content, ingest_html
+from html_to_deck.pipeline.v1_compat import extract_content, ingest_html
 
 sys.path.append(str(Path(__file__).resolve().parents[1]))
 from extract import extract_blocks
