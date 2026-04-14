@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import apply_layout, build_narrative, extract_content, ingest_html, map_to_slides
+from html_to_deck.pipeline.v1_compat import apply_layout, build_narrative, extract_content, ingest_html, map_to_slides
 
 
 def test_layout_stage_applies_layout_contract(fixture_paths):

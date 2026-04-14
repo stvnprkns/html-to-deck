@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from html_to_deck_v1.pipeline import run_pipeline
+from html_to_deck.pipeline.v1_compat import run_pipeline
 
 
 SNAPSHOT_DIR = Path(__file__).parent / "snapshots"

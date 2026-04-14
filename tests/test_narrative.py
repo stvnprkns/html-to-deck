@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import build_narrative, extract_content, ingest_html
+from html_to_deck.pipeline.v1_compat import build_narrative, extract_content, ingest_html
 
 
 def test_narrative_stage_builds_story_beats(fixture_paths):
