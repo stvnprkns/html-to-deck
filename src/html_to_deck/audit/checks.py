@@ -21,11 +21,11 @@ def run_quality_checks(deck: DeckDocument) -> list[str]:
         issues.append("Deck metadata missing source_href")
 
     for index, slide in enumerate(deck.slides, start=1):
+        if len(slide.bullets) > MAX_BULLETS_PER_SLIDE:
+            issues.append(f"slide-{index} exceeds bullet budget")
         word_count = sum(len(bullet.split()) for bullet in slide.bullets)
         if word_count > MAX_WORDS_PER_SLIDE:
             issues.append(f"slide-{index} exceeds word budget")
-        if len(slide.bullets) > MAX_BULLETS_PER_SLIDE:
-            issues.append(f"slide-{index} exceeds bullet budget")
 
     issues.extend(_check_diagram_should_be_code(deck))
     return issues

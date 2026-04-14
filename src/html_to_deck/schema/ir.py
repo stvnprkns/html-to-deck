@@ -17,8 +17,6 @@ class Slide:
     intent: SlideIntent
     title: str
     bullets: list[str] = field(default_factory=list)
-    layout: str | None = None
-    metadata: dict[str, object] = field(default_factory=dict)
 
 
 @dataclass(frozen=True)
@@ -26,4 +24,3 @@ class DeckDocument:
     slides: list[Slide]
     deck_type: str
     source_href: str | None = None
-    audit_issues: list[str] = field(default_factory=list)
