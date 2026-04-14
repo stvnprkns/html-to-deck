@@ -26,3 +26,5 @@ class DeckDocument:
     slides: list[Slide]
     deck_type: str
     source_href: str | None = None
+    layouts: dict[int, str] = field(default_factory=dict)
+    audit_issues: list[str] = field(default_factory=list)

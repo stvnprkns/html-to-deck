@@ -1,4 +1,4 @@
-"""Extract headings, paragraphs, lists, tables, diagrams, and warnings into schema blocks."""
+"""Extraction stage public API."""
 
 from __future__ import annotations
 
@@ -151,104 +151,11 @@ def _merge_contiguous_lists(blocks: list[_PendingBlock]) -> list[_PendingBlock]:
 
 
 def extract_blocks(snapshot: str) -> list[ContentBlock]:
-    """Extract semantic blocks from markdown-like text into schema content blocks."""
+    """Extract semantic blocks from HTML or markdown-like snapshots."""
 
     if not snapshot:
         return []
 
-    lines = [line.rstrip() for line in snapshot.splitlines()]
-    parsed: list[_PendingBlock] = []
-    paragraph_buffer: list[str] = []
+    from .parsers import extract_semantic_blocks
 
-    def flush_paragraph() -> None:
-        if not paragraph_buffer:
-            return
-        text = " ".join(part.strip() for part in paragraph_buffer if part.strip()).strip()
-        paragraph_buffer.clear()
-        if text:
-            parsed.append(
-                _PendingBlock(
-                    block_type="paragraph",
-                    text=text,
-                    confidence=CONFIDENCE_BY_TYPE["paragraph"],
-                )
-            )
-
-    i = 0
-    while i < len(lines):
-        raw = lines[i]
-        line = raw.strip()
-
-        if not line:
-            flush_paragraph()
-            i += 1
-            continue
-
-        table_block, table_end = _extract_table_block(lines, i)
-        if table_block:
-            flush_paragraph()
-            parsed.append(table_block)
-            i = table_end + 1
-            continue
-
-        diagram_block, diagram_end = _extract_fenced_diagram_block(lines, i)
-        if diagram_block:
-            flush_paragraph()
-            parsed.append(diagram_block)
-            i = diagram_end + 1
-            continue
-
-        image_hit = IMAGE_LINE_RE.fullmatch(line)
-        if image_hit:
-            flush_paragraph()
-            parsed.append(
-                _PendingBlock(
-                    block_type="warning",
-                    text=line,
-                    metadata={
-                        "audit_tag": "reject_external_image_reference",
-                        "reason": "external_image_reference",
-                        "src": image_hit.group("src"),
-                        "alt_text": image_hit.group("alt") or "Image",
-                    },
-                    confidence=CONFIDENCE_BY_TYPE["warning"],
-                )
-            )
-            i += 1
-            continue
-
-        heading_hit = HEADING_RE.match(line)
-        if heading_hit:
-            flush_paragraph()
-            parsed.append(
-                _PendingBlock(
-                    block_type="heading",
-                    text=heading_hit.group(2),
-                    metadata={"level": len(heading_hit.group(1))},
-                    confidence=CONFIDENCE_BY_TYPE["heading"],
-                )
-            )
-            i += 1
-            continue
-
-        unordered_hit = UNORDERED_LIST_RE.match(line)
-        ordered_hit = ORDERED_LIST_RE.match(line)
-        list_hit = unordered_hit or ordered_hit
-        if list_hit:
-            flush_paragraph()
-            parsed.append(
-                _PendingBlock(
-                    block_type="list",
-                    text=list_hit.group(1),
-                    confidence=CONFIDENCE_BY_TYPE["list"],
-                )
-            )
-            i += 1
-            continue
-
-        paragraph_buffer.append(raw)
-        i += 1
-
-    flush_paragraph()
-    merged = _merge_contiguous_lists(parsed)
-    return [_build_block(item.block_type, item.text, idx, metadata=item.metadata) for idx, item in enumerate(merged)]
+    return extract_semantic_blocks(snapshot)
