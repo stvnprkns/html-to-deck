@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import ingest_html
+from html_to_deck.pipeline.v1_compat import ingest_html
 
 
 def test_ingest_stage_reads_fixture(fixture_paths):

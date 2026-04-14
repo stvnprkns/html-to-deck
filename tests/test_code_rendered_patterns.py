@@ -1,4 +1,4 @@
-from html_to_deck_v1.pipeline import apply_layout, build_narrative, map_to_slides
+from html_to_deck.pipeline.v1_compat import apply_layout, build_narrative, map_to_slides
 
 
 def _extracted_with_structured(*, diagrams: list[str], tables: list[str], stats: list[str]) -> dict:

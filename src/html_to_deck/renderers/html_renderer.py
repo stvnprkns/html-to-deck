@@ -2,9 +2,11 @@
 
 from __future__ import annotations
 
+import json
 from html import escape
 import json
 
+from ..audit import AuditReport
 from ..schema.ir import DeckDocument
 
 _BASE_CSS = """
@@ -55,8 +57,12 @@ body {
   gap: 1rem;
 }
 .slide h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: -0.02em; }
+.slide p { margin: 0; color: var(--muted); font-size: clamp(1rem, 2.3vw, 1.35rem); line-height: 1.45; }
 .slide ul { margin: 0; padding-left: 1.25rem; color: var(--muted); font-size: clamp(1rem, 2.3vw, 1.6rem); line-height: 1.45; }
 .slide li + li { margin-top: .45rem; }
+.slide-notes { margin-top: .8rem; font-size: .9rem; color: var(--muted); opacity: .9; }
+.slide-meta { margin-top: .5rem; font-size: .78rem; color: var(--muted); opacity: .85; }
+.slide-meta code { color: var(--text); }
 .controls {
   display: flex;
   align-items: center;
@@ -86,6 +92,13 @@ button:hover { border-color: var(--accent); }
   background: linear-gradient(90deg, var(--accent), var(--accent-2));
 }
 .meta { font-size: .9rem; color: var(--muted); min-width: 5rem; text-align: right; }
+.audit-badge {
+  font-size: .8rem;
+  color: var(--muted);
+  border: 1px solid rgba(255,255,255,.18);
+  border-radius: 999px;
+  padding: .28rem .55rem;
+}
 .source-link {
   display: inline-flex;
   align-items: center;
@@ -183,6 +196,7 @@ class HtmlDeckRenderer:
       <button type=\"button\" data-next aria-label=\"Next slide\">Next ▶</button>
       <div class=\"progress\" aria-hidden=\"true\"><div data-progress></div></div>
       {source_link_markup}
+      {audit_markup}
       <div class=\"meta\" data-counter>0 / 0</div>
     </footer>
   </main>
@@ -202,6 +216,12 @@ class HtmlDeckRenderer:
             f"<section class=\"slide-inner\"><h1>{escape(title)}</h1><ul>{items}</ul></section>"
             "</article>"
         )
+
+    @staticmethod
+    def _render_audit_summary(audit_report: AuditReport | None) -> str:
+        if audit_report is None:
+            return ""
+        return f'<div class="audit-badge" data-audit-summary>{escape(audit_report.summary_line)}</div>'
 
     @staticmethod
     def _render_source_link(source_href: str | None) -> str:

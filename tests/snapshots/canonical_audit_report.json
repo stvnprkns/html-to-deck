@@ -1,0 +1,40 @@
+{
+  "counts_by_severity": {
+    "critical": 1,
+    "high": 2,
+    "low": 0,
+    "medium": 1
+  },
+  "has_blockers": true,
+  "warning_count": 4,
+  "warnings": [
+    {
+      "actionable": "Trim to ~110 words or split this into two slides.",
+      "check": "too_much_text_per_slide",
+      "confidence": 0.88,
+      "severity": "medium",
+      "slide_id": "slide-1"
+    },
+    {
+      "actionable": "Use one primary communication job per slide (inform, persuade, decide, or align).",
+      "check": "mixed_communication_jobs",
+      "confidence": 0.86,
+      "severity": "high",
+      "slide_id": "slide-1"
+    },
+    {
+      "actionable": "Attach evidence and citation provenance for each explicit claim.",
+      "check": "missing_evidence_or_provenance",
+      "confidence": 0.94,
+      "severity": "critical",
+      "slide_id": "slide-2"
+    },
+    {
+      "actionable": "Use a code-spec diagram (or add metadata.diagram_exception=true with justification) instead of an image-backed diagram.",
+      "check": "diagram_should_be_code",
+      "confidence": 0.91,
+      "severity": "high",
+      "slide_id": "slide-2"
+    }
+  ]
+}

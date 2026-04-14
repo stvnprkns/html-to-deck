@@ -1,0 +1,50 @@
+{
+  "article-story": {
+    "deck_type": "summary",
+    "slides": [
+      {
+        "bullets": [
+          "<!doctype html>\n<html>\n<head>\n<title>Inside the Urban Farming Revival</title>\n</head>\n<body>\n<h1>How Urban Farms Rebuilt Community</h1>\n<p>Vacant lots transformed into productive gardens in less than two years.</p>\n<h2>Background</h2>\n<p>Local residents partnered with civic organizations for micro-grants.</p>\n<h2>Turning Point</h2>\n<p>A heat wave made food deserts visible and accelerated participation.</p>\n</body>\n</html>"
+        ],
+        "intent": "content",
+        "title": "Generated Slide"
+      }
+    ]
+  },
+  "case-study": {
+    "deck_type": "summary",
+    "slides": [
+      {
+        "bullets": [
+          "<!doctype html>\n<html>\n<head>\n<title>Case Study: Onboarding Optimization</title>\n</head>\n<body>\n<h1>Reducing Onboarding Time by 35%</h1>\n<p>A B2B SaaS company redesigned first-run tasks and support messaging.</p>\n<h2>Challenge</h2>\n<p>Users stalled in account setup after configuration complexity increased.</p>\n<h2>Outcome</h2>\n<ul>\n<li>Activation improved from 48% to 67%</li>\n<li>Support tickets decreased by 22%</li>\n</ul>\n</body>\n</html>"
+        ],
+        "intent": "content",
+        "title": "Generated Slide"
+      }
+    ]
+  },
+  "landing-page-narrative": {
+    "deck_type": "summary",
+    "slides": [
+      {
+        "bullets": [
+          "<!doctype html>\n<html>\n<head>\n<title>Launch Narrative for Nimbus AI</title>\n</head>\n<body>\n<h1>Meet Nimbus: Your Team's Second Brain</h1>\n<p>Nimbus unifies docs, meetings, and workflows into a shared memory layer.</p>\n<h2>Problem</h2>\n<p>Knowledge is fragmented across tools, leading to repeated work.</p>\n<h2>Solution</h2>\n<p>Context-aware retrieval and action suggestions keep teams aligned.</p>\n<h2>Proof</h2>\n<p>Pilot customers reduced time-to-answer by 41 percent.</p>\n</body>\n</html>"
+        ],
+        "intent": "content",
+        "title": "Generated Slide"
+      }
+    ]
+  },
+  "report-summary": {
+    "deck_type": "summary",
+    "slides": [
+      {
+        "bullets": [
+          "<!doctype html>\n<html>\n<head>\n<title>Q4 Business Report Summary</title>\n</head>\n<body>\n<h1>Q4 Report Summary</h1>\n<p>Revenue increased 18 percent quarter-over-quarter, driven by enterprise renewals.</p>\n<h2>Highlights</h2>\n<ul>\n<li>ARR reached $12.4M</li>\n<li>Gross retention improved to 94%</li>\n</ul>\n<h2>Risks</h2>\n<p>Hiring pipeline for senior engineering remains constrained in core regions.</p>\n</body>\n</html>"
+        ],
+        "intent": "content",
+        "title": "Generated Slide"
+      }
+    ]
+  }
+}
