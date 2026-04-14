@@ -18,16 +18,12 @@ def _check_diagram_should_be_code(deck: DeckDocument) -> list[str]:
 
     issues: list[str] = []
     for index, slide in enumerate(deck.slides, start=1):
-        metadata = getattr(slide, "metadata", {})
-        if not isinstance(metadata, dict):
-            continue
+        block_type = str(slide.metadata.get("block_type", "")).lower()
+        visual_intent = str(slide.metadata.get("visual_intent", "")).lower()
+        diagram_source = str(slide.metadata.get("diagram_source", "")).lower()
+        has_exception = bool(slide.metadata.get("diagram_exception"))
 
-        block_type = str(metadata.get("block_type", "")).lower()
-        visual_intent = str(metadata.get("visual_intent", "")).lower()
-        diagram_source = str(metadata.get("diagram_source", "")).lower()
-        has_exception = bool(metadata.get("diagram_exception"))
-
-        is_diagram_intent = visual_intent == "diagram" or bool(metadata.get("diagram_intent"))
+        is_diagram_intent = visual_intent == "diagram" or bool(slide.metadata.get("diagram_intent"))
         uses_image_like_block = block_type in {"image", "image_with_caption", "figure", "diagram_image", "screenshot"}
         is_code_spec_diagram = diagram_source in {"code_spec", "code-spec", "dsl"}
 

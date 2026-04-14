@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
+import json
 from html import escape
 
-from ..schema.ir import DeckDocument
+from ..schema.ir import DeckDocument, Slide
 
 _BASE_CSS = """
 :root {
@@ -54,8 +55,12 @@ body {
   gap: 1rem;
 }
 .slide h1 { margin: 0; font-size: clamp(1.5rem, 4vw, 3rem); letter-spacing: -0.02em; }
+.slide p { margin: 0; color: var(--muted); font-size: clamp(1rem, 2.3vw, 1.35rem); line-height: 1.45; }
 .slide ul { margin: 0; padding-left: 1.25rem; color: var(--muted); font-size: clamp(1rem, 2.3vw, 1.6rem); line-height: 1.45; }
 .slide li + li { margin-top: .45rem; }
+.slide-notes { margin-top: .8rem; font-size: .9rem; color: var(--muted); opacity: .9; }
+.slide-meta { margin-top: .5rem; font-size: .78rem; color: var(--muted); opacity: .85; }
+.slide-meta code { color: var(--text); }
 .controls {
   display: flex;
   align-items: center;
@@ -158,7 +163,7 @@ class HtmlDeckRenderer:
     """Render a DeckDocument into a standalone interactive HTML slideshow."""
 
     def render(self, deck: DeckDocument) -> str:
-        slide_markup = "\n".join(self._render_slide(idx, slide.title, slide.bullets) for idx, slide in enumerate(deck.slides, start=1))
+        slide_markup = "\n".join(self._render_slide(idx, slide) for idx, slide in enumerate(deck.slides, start=1))
         title = escape(deck.slides[0].title if deck.slides else "Generated Deck")
         source_link_markup = self._render_source_link(deck.source_href)
 
@@ -187,11 +192,35 @@ class HtmlDeckRenderer:
 """
 
     @staticmethod
-    def _render_slide(index: int, title: str, bullets: list[str]) -> str:
-        items = "\n".join(f"<li>{escape(bullet)}</li>" for bullet in bullets) if bullets else "<li>No bullet content extracted.</li>"
+    def _render_slide(index: int, slide: Slide) -> str:
+        items = "\n".join(f"<li>{escape(bullet)}</li>" for bullet in slide.bullets) if slide.bullets else "<li>No bullet content extracted.</li>"
+        body_markup = f"<p>{escape(slide.body)}</p>" if slide.body else ""
+        notes_markup = f"<aside class=\"slide-notes\">Notes: {escape(slide.notes)}</aside>" if slide.notes else ""
+        evidence_markup = (
+            "<p class=\"slide-meta\"><strong>Evidence:</strong> "
+            + ", ".join(escape(item) for item in slide.evidence)
+            + "</p>"
+        ) if slide.evidence else ""
+        source_refs_markup = (
+            "<p class=\"slide-meta\"><strong>Source refs:</strong> "
+            + ", ".join(escape(ref) for ref in slide.source_refs)
+            + "</p>"
+        ) if slide.source_refs else ""
+        metadata_markup = (
+            f"<p class=\"slide-meta\"><strong>Metadata:</strong> <code>{escape(json.dumps(slide.metadata, sort_keys=True))}</code></p>"
+            if slide.metadata else ""
+        )
+
+        meta_items: list[str] = []
+        if slide.layout_hint:
+            meta_items.append(f"layout={escape(slide.layout_hint)}")
+        if slide.pattern:
+            meta_items.append(f"pattern={escape(slide.pattern)}")
+        meta_markup = f"<p class=\"slide-meta\"><code>{' | '.join(meta_items)}</code></p>" if meta_items else ""
+
         return (
             f"<article class=\"slide\" id=\"slide-{index}\">"
-            f"<section class=\"slide-inner\"><h1>{escape(title)}</h1><ul>{items}</ul></section>"
+            f"<section class=\"slide-inner\"><h1>{escape(slide.title)}</h1>{body_markup}<ul>{items}</ul>{notes_markup}{evidence_markup}{source_refs_markup}{metadata_markup}{meta_markup}</section>"
             "</article>"
         )
 
