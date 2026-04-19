@@ -1,22 +1,32 @@
-# html-to-deck v1
+# html-to-deck
 
-This repository provides a deterministic **v1 HTML → deck JSON** reference pipeline, fixtures, and snapshot-driven test coverage. It also ships a **standalone HTML slide viewer** suitable for portfolio sites.
+Okay so: you wrote a page in HTML. Good. Now you also want a **deck**—arrow keys, swipey slides, the whole thing—without hand-copying everything into Keynote at midnight. That’s basically what this is.
 
-## Install
+Under the hood it’s a **small, stubborn pipeline**: HTML in → structured stages out → either **JSON** (for whatever you’re building) or a **self-contained HTML viewer** you can drop on a portfolio or static host. Deterministic, tested, not pretending to be a browser engine. (We’re not running your React bundle. Sorry.)
 
-From the repository root (Python 3.11+):
+---
+
+## Get it running
+
+Python **3.11+**, from the repo root:
 
 ```bash
 pip install .
 ```
 
-This installs the `html_to_deck` package and the **`html-to-deck`** command-line tool (ensure your user script directory is on `PATH`, or invoke `python3 -m html_to_deck.cli`).
+You get the `html_to_deck` package plus a CLI named **`html-to-deck`**. If your shell can’t find it, no drama—use `python3 -m html_to_deck.cli` instead.
 
-## Portfolio quickstart
+---
 
-1. Structure your source HTML as described in **[docs/authoring-decks.md](docs/authoring-decks.md)** (one `<h1>`, section `<h2>`s, focused paragraphs and lists, `<img>` for figures).
-2. Map your site’s design tokens (optional): see **[docs/design-tokens.md](docs/design-tokens.md)** for the `--deck-*` contract and built-in aliases such as `--primary` / `--background`.
-3. Generate a deck for embedding in a page or static host:
+## The “make it look like my site” path
+
+If you’re shipping this next to your actual work, you probably care about three things: **structure**, **tokens**, **not looking like a devtool**.
+
+1. **Structure** — One `<h1>`, real `<h2>` sections, short `<p>` chunks, lists that mean something, `<img>` when you care about the visual. [Authoring guide](docs/authoring-decks.md) goes deep; tl;dr don’t paste a novel and expect magic.
+
+2. **Tokens** — We expose a little **`--deck-*`** contract so your CSS can line up with the viewer. Aliases like `--primary` / `--background` work too. [Design tokens](docs/design-tokens.md) is the cheat sheet.
+
+3. **Polish** — Embed layout, hide the audit badge and source pill when you’re not debugging.
 
 ```bash
 html-to-deck --input case-study.html --output public/deck.html \
@@ -26,12 +36,14 @@ html-to-deck --input case-study.html --output public/deck.html \
   --audit-output none
 ```
 
-- **`--layout embed`** — centered `max-width`, `min-height` instead of locking the shell to `100vh` (better inside an article layout).
-- **`--tokens-css`** — CSS injected **before** the theme (map site variables to `--deck-*`).
-- **`--extra-css`** — overrides injected **after** the theme.
-- **`--no-audit-badge` / `--no-source-link`** — cleaner public-facing HTML.
+Quick decoder ring:
 
-### Python API
+- **`--layout embed`** — Doesn’t hijack the whole viewport like it owns the place. Nicer inside a long portfolio page.
+- **`--tokens-css`** — Loaded *before* the theme so your variables can feed `--deck-*`.
+- **`--extra-css`** — Loaded *after* the theme when you need to win a specificity fight.
+- **`--no-audit-badge` / `--no-source-link`** — For when strangers visit and don’t need your linter cosplay.
+
+### From Python
 
 ```python
 from pathlib import Path
@@ -48,13 +60,17 @@ convert(
 )
 ```
 
-`render_html_string(...)` renders a `DeckDocument` to HTML without writing a file.
+There’s also `render_html_string(...)` if you already have a `DeckDocument` and just want HTML in a string. Fancy.
 
-### Cursor skill
+### Cursor friends
 
-For agent-assisted authoring and CLI usage, see **`.cursor/skills/html-to-deck-portfolio/SKILL.md`**.
+There’s a skill at **`.cursor/skills/html-to-deck-portfolio/SKILL.md`** so your agent stops improvising and actually uses the flags. You’re welcome.
 
-## Architecture
+---
+
+## How the sausage gets made
+
+Still a pipeline. Still boring to read. Still useful when you’re debugging.
 
 ```text
 [ingest] -> HtmlDocument
@@ -97,88 +113,81 @@ For agent-assisted authoring and CLI usage, see **`.cursor/skills/html-to-deck-p
     }
 ```
 
-## CLI usage
+---
 
-Print version:
+## CLI you’ll actually run
+
+Version check (trust issues):
 
 ```bash
 html-to-deck --version
 ```
 
-Run the legacy v1 JSON pipeline (fixture snapshot style):
+**Legacy v1 JSON** straight to stdout (snapshot-era workflow):
 
 ```bash
 PYTHONPATH=src python3 -m html_to_deck_v1 fixtures/html/report-summary.html
 ```
 
-The command prints the final JSON deck spec.
-
-Generate an interactive HTML deck viewer (keyboard + touch navigation):
+**HTML deck** with keys + touch:
 
 ```bash
 html-to-deck --input fixtures/html/report-summary.html --output out/deck.html --format html
 ```
 
-Or without installing (development tree):
+Living out of the git tree without `pip install`? Same thing, more typing:
 
 ```bash
 PYTHONPATH=src python3 -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html
 ```
 
-The CLI prints the written output path on stdout (for example `out/deck.html`), then prints the audit summary by default.
+Stdout prints the output path, then an audit summary unless you tell it not to.
 
-### HTML viewer themes
+### Themes
 
-- **`default`** — Dark “midnight” viewer (default when `--theme` is omitted).
-- **`portfolio`** — Warm light shell, `prefers-color-scheme` dark palette, Instrument Serif + Inter (see `src/html_to_deck/renderers/themes.py`).
+- **`default`** — Midnight vibes. Good for “I’m in the zone and also possibly a submarine.”
+- **`portfolio`** — Warmer, serif headlines, respects `prefers-color-scheme`. Good for “this is on my website and humans will see it.”
 
 ```bash
 html-to-deck --input fixtures/html/report-summary.html --output out/deck.html --format html --theme portfolio
 ```
 
-Append your own CSS after the theme (HTML output only):
+Extra CSS after the theme:
 
 ```bash
 html-to-deck --input page.html --output out/deck.html --format html --theme portfolio --extra-css ./overrides.css
 ```
 
-### Authoring narrative source
+---
 
-See **[docs/authoring-decks.md](docs/authoring-decks.md)** for how to structure HTML or markdown so slides stay focused and presentation-native.
-
-### Python version
-
-Use Python 3.11+ for `html_to_deck.cli` and packaged installs.
-
-## Running tests
+## Tests (yes you should)
 
 ```bash
 pip install -e ".[dev]"
 python3 -m pytest -q
 ```
 
-During development without an editable install:
+Or, if you’re living dangerously with `PYTHONPATH` only:
 
 ```bash
 PYTHONPATH=src python3 -m pytest -q
 ```
 
-## Fixture format and snapshot workflow
+---
 
-### Fixture format
+## Fixtures & snapshots
 
-Put fixture pages under `fixtures/html/*.html`.
+HTML fixtures live in `fixtures/html/*.html`. Rough checklist:
 
-Guidelines:
-- include one `<title>`
-- include one primary `<h1>`
-- include one or more `<h2>` sections
-- include narrative text in `<p>` and optional bullet points in `<li>`
+- a `<title>`
+- one real `<h1>`
+- at least one `<h2>` section
+- `<p>` / `<li>` with actual thoughts in them
 
-### Snapshot update workflow
+When you change pipeline output and the snapshots need love:
 
-1. Make fixture or pipeline changes.
-2. Regenerate snapshots:
+1. Do the thing you’re doing.
+2. Regenerate:
 
    ```bash
    PYTHONPATH=src python3 - <<'PY'
@@ -201,19 +210,27 @@ Guidelines:
    PY
    ```
 
-3. Run tests and ensure e2e snapshot assertions pass.
+3. Run pytest again and stare at the diff until it makes sense.
 
-## v1 design principles
+---
 
-- **Deterministic outputs**: identical HTML input yields identical stage artifacts.
-- **Explicit contracts per stage**: tests assert field presence and core semantics.
-- **Snapshot confidence**: e2e snapshots guard canonical IR, rendered deck JSON, and audit output.
-- **Small-footprint parser**: standard-library HTML parser only, optimized for reliable fixtures.
+## What we’re trying to be good at
 
-## Known limitations (v1)
+- **Same input → same output** (boring in a good way).
+- **Stages with contracts** so tests know what “correct” means.
+- **Snapshots** so nobody accidentally ships a silent regression.
+- **stdlib HTML parsing**—small dependency footprint, no “download half of npm to read a `<p>` tag.”
 
-- Not a full browser-grade HTML model (no CSS/DOM layout evaluation).
-- Semantics are intentionally simple (headings + paragraphs + list items + HTML images).
-- Audit rule set is minimal and intended as a baseline.
-- Markdown image references are flagged as warnings, not rendered as slides; use HTML `<img>` for figures in the standalone viewer.
-- Fetching remote HTML requires `HTML_TO_DECK_ENABLE_URL_INGEST=1` (see `src/html_to_deck/ingest/loader.py`).
+---
+
+## What we’re *not* pretending to be
+
+- A full browser layout engine. CSS grid on your blog does not magically become slide geometry here.
+- A semantic free-for-all. Headings, paragraphs, lists, images—that’s the deal.
+- A giant audit product. The checks are a baseline, not your VP of Compliance.
+- Markdown images as first-class slide figures in the HTML viewer—use real `<img>` if you need the picture to show up.
+- URL fetch unless you flip **`HTML_TO_DECK_ENABLE_URL_INGEST=1`** (see `src/html_to_deck/ingest/loader.py`). Default is local files; less “surprise I called the internet.”
+
+---
+
+That’s the gist. Ship something weird and beautiful.
