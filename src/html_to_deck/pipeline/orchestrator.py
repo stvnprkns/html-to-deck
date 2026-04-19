@@ -33,10 +33,23 @@ class HtmlToDeckPipeline:
         output_path: Path,
         *,
         html_theme: str = "default",
+        html_tokens_css: str | None = None,
         html_extra_css: str | None = None,
+        html_layout: str = "fullscreen",
+        html_show_audit_badge: bool = True,
+        html_show_source_link: bool = True,
     ) -> "HtmlToDeckPipeline":
         if output_path.suffix.lower() in {".html", ".htm"}:
-            return cls(renderer=HtmlDeckRenderer(theme=html_theme, extra_css=html_extra_css))
+            return cls(
+                renderer=HtmlDeckRenderer(
+                    theme=html_theme,
+                    tokens_css=html_tokens_css,
+                    extra_css=html_extra_css,
+                    layout=html_layout,
+                    show_audit_badge=html_show_audit_badge,
+                    show_source_link=html_show_source_link,
+                )
+            )
         return cls(renderer=JsonDeckRenderer())
 
     def run(self, pipeline_input: PipelineInput, output_path: Path) -> PipelineOutput:

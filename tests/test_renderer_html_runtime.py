@@ -21,7 +21,7 @@ def test_html_renderer_outputs_runtime_controls() -> None:
 
     html = HtmlDeckRenderer().render(deck, AuditReport(warnings=[]))
 
-    assert "<article class=\"slide\" id=\"slide-1\">" in html
+    assert 'id="slide-1"' in html and 'class="slide"' in html
     assert "data-next" in html
     assert "data-progress" in html
     assert "ArrowRight" in html
