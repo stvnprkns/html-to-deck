@@ -2,11 +2,11 @@
 
 from __future__ import annotations
 
-from collections import defaultdict
-
 from ..extract.blocks import ContentBlock
 from ..narrative.inference import Storyline
-from ..schema.ir import DeckDocument, Slide, SlideIntent
+from ..schema.ir import DeckDocument, Slide, SlideImage, SlideIntent
+
+SectionItem = str | SlideImage
 
 
 def map_to_slides(blocks: list[ContentBlock], storyline: Storyline, source_href: str | None) -> DeckDocument:
@@ -27,21 +27,26 @@ def map_to_slides(blocks: list[ContentBlock], storyline: Storyline, source_href:
         )
     ]
 
-    for idx, (section_title, lines) in enumerate(sections, start=1):
-        bullets = [line for line in lines if line]
-        if not bullets:
+    for idx, (section_title, items) in enumerate(sections, start=1):
+        bullets = [x for x in items if isinstance(x, str)]
+        figures = tuple(x for x in items if isinstance(x, SlideImage))
+        if not bullets and not figures:
             continue
         slides.append(
             Slide(
                 intent=SlideIntent.CONTENT,
                 title=section_title or f"Section {idx}",
                 bullets=bullets,
+                figures=figures,
                 metadata={"stage": "map", "section": section_title or f"Section {idx}"},
             )
         )
 
     if len(slides) > 2:
-        summary_points = _unique_points([bullet for slide in slides[1:] for bullet in slide.bullets], limit=3)
+        summary_points = _unique_points(
+            [bullet for slide in slides[1:] for bullet in slide.bullets],
+            limit=3,
+        )
         slides.append(
             Slide(
                 intent=SlideIntent.SUMMARY,
@@ -81,7 +86,13 @@ def design_stage(deck: DeckDocument) -> DeckDocument:
             }
         )
         themed_slides.append(
-            Slide(intent=slide.intent, title=slide.title, bullets=slide.bullets, metadata=metadata)
+            Slide(
+                intent=slide.intent,
+                title=slide.title,
+                bullets=slide.bullets,
+                figures=slide.figures,
+                metadata=metadata,
+            )
         )
 
     return DeckDocument(
@@ -95,24 +106,56 @@ def design_stage(deck: DeckDocument) -> DeckDocument:
 
 def _resolve_title(blocks: list[ContentBlock]) -> str:
     for block in blocks:
-        if block.kind in {"title", "heading"} and block.text:
+        if block.block_type in {"title", "heading"} and block.text:
             return block.text
     return "Untitled Deck"
 
 
-def _group_sections(blocks: list[ContentBlock]) -> list[tuple[str, list[str]]]:
-    sections: dict[str, list[str]] = defaultdict(list)
+def _group_sections(blocks: list[ContentBlock]) -> list[tuple[str, list[SectionItem]]]:
+    """Preserve in-section order of paragraphs and images."""
+
+    section_order: list[str] = []
+    content: dict[str, list[SectionItem]] = {}
     current_section = "Overview"
 
-    for block in blocks:
-        if block.kind == "title":
-            continue
-        if block.kind == "heading":
-            current_section = block.text
-            continue
-        sections[current_section].append(block.text)
+    def touch(name: str) -> None:
+        if name not in content:
+            content[name] = []
+            section_order.append(name)
 
-    return [(name, lines) for name, lines in sections.items() if lines]
+    touch(current_section)
+
+    for block in blocks:
+        bt = block.block_type
+        if bt == "title":
+            continue
+        if bt == "heading":
+            current_section = block.text
+            touch(current_section)
+            continue
+        if bt == "image":
+            src = str(block.metadata.get("src", "")).strip()
+            if not src:
+                continue
+            w = block.metadata.get("width")
+            h = block.metadata.get("height")
+            fig = SlideImage(
+                src=src,
+                alt=str(block.metadata.get("alt", "")),
+                width=w if isinstance(w, int) else None,
+                height=h if isinstance(h, int) else None,
+            )
+            touch(current_section)
+            content[current_section].append(fig)
+            continue
+
+        text = block.text.strip()
+        if not text:
+            continue
+        touch(current_section)
+        content[current_section].append(text)
+
+    return [(name, content[name]) for name in section_order if content[name]]
 
 
 def _unique_points(points: list[str], limit: int) -> list[str]:

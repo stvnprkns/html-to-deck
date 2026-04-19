@@ -4,14 +4,14 @@ import json
 from pathlib import Path
 
 from html_to_deck.pipeline.orchestrator import HtmlToDeckPipeline
-from html_to_deck.types import PipelineInput
+from html_to_deck.types import PipelineInput, SourceKind
 
 
 def test_pipeline_generates_multiple_intent_driven_slides_from_fixtures(fixture_paths, tmp_path: Path) -> None:
     for fixture in fixture_paths:
         output = tmp_path / f"{fixture.stem}.json"
         HtmlToDeckPipeline.default().run(
-            pipeline_input=PipelineInput(source=fixture, is_file=True),
+            pipeline_input=PipelineInput(source=fixture, source_kind=SourceKind.FILE),
             output_path=output,
         )
 
@@ -36,7 +36,7 @@ def test_pipeline_render_payload_includes_layout_and_audit_data(tmp_path: Path) 
 
     output = tmp_path / "deck.json"
     HtmlToDeckPipeline.default().run(
-        pipeline_input=PipelineInput(source=html, is_file=False),
+        pipeline_input=PipelineInput(source=html, source_kind=SourceKind.HTML_STRING),
         output_path=output,
     )
 
@@ -44,5 +44,5 @@ def test_pipeline_render_payload_includes_layout_and_audit_data(tmp_path: Path) 
 
     assert payload["layouts"]
     assert "audit" in payload
-    assert {"issue_count", "issues"}.issubset(payload["audit"].keys())
+    assert "warnings" in payload["audit"]
     assert all("layout" in slide["metadata"] for slide in payload["slides"])

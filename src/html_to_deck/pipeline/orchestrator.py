@@ -15,7 +15,7 @@ from ..layout import choose_layout_patterns
 from ..narrative import infer_storyline
 from ..renderers import HtmlDeckRenderer, JsonDeckRenderer
 from ..schema.ir import DeckDocument
-from ..types import PipelineInput, PipelineOutput, SupportsRender
+from ..types import PipelineInput, PipelineOutput, SourceKind, SupportsRender
 from .stages import layout_stage, map_to_slides
 
 
@@ -28,9 +28,15 @@ class HtmlToDeckPipeline:
         return cls(renderer=JsonDeckRenderer())
 
     @classmethod
-    def from_output_path(cls, output_path: Path) -> "HtmlToDeckPipeline":
+    def from_output_path(
+        cls,
+        output_path: Path,
+        *,
+        html_theme: str = "default",
+        html_extra_css: str | None = None,
+    ) -> "HtmlToDeckPipeline":
         if output_path.suffix.lower() in {".html", ".htm"}:
-            return cls(renderer=HtmlDeckRenderer())
+            return cls(renderer=HtmlDeckRenderer(theme=html_theme, extra_css=html_extra_css))
         return cls(renderer=JsonDeckRenderer())
 
     def run(self, pipeline_input: PipelineInput, output_path: Path) -> PipelineOutput:
@@ -46,16 +52,16 @@ class HtmlToDeckPipeline:
         layouted_deck = layout_stage(mapped_deck, layouts)
         designed_deck = apply_design_rules(layouted_deck, layouted_deck.layouts)
 
-        issues = run_quality_checks(designed_deck)
+        audit_report = run_quality_checks(designed_deck)
         audited_deck = DeckDocument(
             slides=designed_deck.slides,
             deck_type=designed_deck.deck_type,
             source_href=designed_deck.source_href,
             layouts=designed_deck.layouts,
-            audit_issues=issues,
+            audit_issues=[],
         )
 
-        rendered = self.renderer.render(audited_deck)
+        rendered = self.renderer.render(audited_deck, audit_report)
         final_path = write_output(rendered, output_path)
         return PipelineOutput(output_path=final_path, audit_report=audit_report)
 

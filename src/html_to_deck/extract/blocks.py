@@ -150,12 +150,139 @@ def _merge_contiguous_lists(blocks: list[_PendingBlock]) -> list[_PendingBlock]:
     return merged
 
 
+def _markdown_line_blocks(lines: list[str]) -> list[_PendingBlock]:
+    """Parse markdown lines into pending blocks (lists as one item per line, merged later)."""
+
+    raw: list[_PendingBlock] = []
+    i = 0
+    while i < len(lines):
+        stripped = lines[i].strip()
+        if not stripped:
+            i += 1
+            continue
+
+        if TABLE_ROW_RE.match(stripped):
+            table, j = _extract_table_block(lines, i)
+            if table is not None:
+                raw.append(table)
+                i = j + 1
+                continue
+            chunk: list[str] = []
+            k = i
+            while k < len(lines) and TABLE_ROW_RE.match(lines[k].strip()):
+                chunk.append(lines[k].strip())
+                k += 1
+            raw.append(
+                _PendingBlock(
+                    block_type="paragraph",
+                    text="\n".join(chunk),
+                    metadata={},
+                    confidence=CONFIDENCE_BY_TYPE["paragraph"],
+                )
+            )
+            i = k
+            continue
+
+        if stripped.startswith("```"):
+            diagram, j = _extract_fenced_diagram_block(lines, i)
+            if diagram is not None:
+                raw.append(diagram)
+                i = j + 1
+                continue
+            body_lines = [lines[i]]
+            k = i + 1
+            while k < len(lines) and lines[k].strip() != "```":
+                body_lines.append(lines[k])
+                k += 1
+            if k < len(lines) and lines[k].strip() == "```":
+                body_lines.append(lines[k])
+                k += 1
+            raw.append(
+                _PendingBlock(
+                    block_type="paragraph",
+                    text="\n".join(body_lines),
+                    metadata={},
+                    confidence=CONFIDENCE_BY_TYPE["paragraph"],
+                )
+            )
+            i = k
+            continue
+
+        heading_hit = HEADING_RE.match(stripped)
+        if heading_hit:
+            level = len(heading_hit.group(1))
+            text = heading_hit.group(2).strip()
+            raw.append(
+                _PendingBlock(
+                    block_type="heading",
+                    text=text,
+                    metadata={"level": level},
+                    confidence=CONFIDENCE_BY_TYPE["heading"],
+                )
+            )
+            i += 1
+            continue
+
+        list_hit = UNORDERED_LIST_RE.match(lines[i]) or ORDERED_LIST_RE.match(lines[i])
+        if list_hit:
+            raw.append(
+                _PendingBlock(
+                    block_type="list",
+                    text=list_hit.group(1).strip(),
+                    metadata={},
+                    confidence=CONFIDENCE_BY_TYPE["list"],
+                )
+            )
+            i += 1
+            continue
+
+        image_hit = IMAGE_LINE_RE.fullmatch(stripped)
+        if image_hit:
+            src = image_hit.group("src").strip()
+            alt = image_hit.group("alt").strip()
+            raw.append(
+                _PendingBlock(
+                    block_type="warning",
+                    text=f"External image ignored: {src}",
+                    metadata={
+                        "audit_tag": "reject_external_image_reference",
+                        "src": src,
+                        "alt": alt,
+                    },
+                    confidence=CONFIDENCE_BY_TYPE["warning"],
+                )
+            )
+            i += 1
+            continue
+
+        raw.append(
+            _PendingBlock(
+                block_type="paragraph",
+                text=stripped,
+                metadata={},
+                confidence=CONFIDENCE_BY_TYPE["paragraph"],
+            )
+        )
+        i += 1
+
+    return _merge_contiguous_lists(raw)
+
+
+def _extract_markdown_rich(snapshot: str) -> list[ContentBlock]:
+    lines = snapshot.splitlines()
+    merged = _markdown_line_blocks(lines)
+    return [_build_block(pb.block_type, pb.text, idx, metadata=pb.metadata) for idx, pb in enumerate(merged)]
+
+
 def extract_blocks(snapshot: str) -> list[ContentBlock]:
     """Extract semantic blocks from HTML or markdown-like snapshots."""
 
     if not snapshot:
         return []
 
-    from .parsers import extract_semantic_blocks
+    text = snapshot.strip()
+    if "<" in text and ">" in text:
+        from .parsers import extract_semantic_blocks
 
-    return extract_semantic_blocks(snapshot)
+        return extract_semantic_blocks(snapshot)
+    return _extract_markdown_rich(snapshot)

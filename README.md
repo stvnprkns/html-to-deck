@@ -63,6 +63,25 @@ PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.h
 
 The CLI prints the written output path on stdout (for example `out/deck.html`), then prints the audit summary by default.
 
+### HTML viewer themes
+
+- **`default`** — Original dark “midnight” viewer (still the default when `--theme` is omitted).
+- **`portfolio`** — Warm light page shell, `prefers-color-scheme` dark palette, Instrument Serif + Inter headings/body, accent-colored progress (see `src/html_to_deck/renderers/themes.py`).
+
+```bash
+PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html --theme portfolio
+```
+
+Append your own CSS after the theme (HTML output only):
+
+```bash
+PYTHONPATH=src python -m html_to_deck.cli --input page.html --output out/deck.html --format html --theme portfolio --extra-css ./overrides.css
+```
+
+### Authoring narrative source
+
+See **[docs/authoring-decks.md](docs/authoring-decks.md)** for how to structure HTML or markdown so slides stay focused and presentation-native.
+
 ### Python version
 
 Use Python 3.11+ when running the new `html_to_deck.cli` entrypoint locally.
@@ -124,6 +143,6 @@ Guidelines:
 ## Known limitations (v1)
 
 - Not a full browser-grade HTML model (no CSS/DOM layout evaluation).
-- Semantics are intentionally simple (headings + paragraphs + bullets).
+- Semantics are intentionally simple (headings + paragraphs + list items + HTML images).
 - Audit rule set is minimal and intended as a baseline.
-- No image extraction or rich media mapping in v1.
+- Markdown image references are flagged as warnings, not rendered as slides; use HTML `<img>` for figures in the standalone viewer.

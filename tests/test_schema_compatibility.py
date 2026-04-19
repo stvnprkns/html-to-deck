@@ -14,43 +14,33 @@ def test_json_renderer_backward_compatible_with_minimal_slide() -> None:
 
     payload = json.loads(JsonDeckRenderer().render(deck))
 
-    assert payload == {
-        "deck_type": "narrative",
-        "slides": [
-            {
-                "intent": "content",
-                "title": "Legacy Title",
-                "bullets": ["Legacy bullet"],
-            }
-        ],
-    }
+    assert payload["deck_type"] == "narrative"
+    assert payload["layouts"] == {}
+    assert payload["audit"]["issue_count"] == 0
+    assert payload["audit"]["issues"] == []
+    assert len(payload["slides"]) == 1
+    slide = payload["slides"][0]
+    assert slide["intent"] == "content"
+    assert slide["title"] == "Legacy Title"
+    assert slide["bullets"] == ["Legacy bullet"]
+    assert slide["figures"] == []
+    assert slide["metadata"] == {}
 
 
-def test_renderers_serialize_extended_slide_fields_safely() -> None:
+def test_renderers_escape_untrusted_strings_in_html() -> None:
     slide = Slide(
         intent=SlideIntent.CONTENT,
-        title="Roadmap",
-        bullets=["A", "B"],
-        body="Plain body",
-        notes='Keep <confidential> "notes"',
-        metadata={"block_type": "figure", "unsafe": "<script>alert(1)</script>"},
-        evidence=["SRE report", "Perf trace"],
-        source_refs=["https://example.com/a", "doc://internal"],
-        layout_hint="two-column",
-        pattern="split-hero",
+        title='Roadmap <script>alert(1)</script>',
+        bullets=['<b>not bold in deck</b>', "normal"],
+        metadata={"layout": "two-column"},
     )
     deck = DeckDocument(deck_type="narrative", slides=[slide])
 
     payload = json.loads(JsonDeckRenderer().render(deck))
-    assert payload["slides"][0]["body"] == "Plain body"
-    assert payload["slides"][0]["notes"] == 'Keep <confidential> "notes"'
-    assert payload["slides"][0]["metadata"]["unsafe"] == "<script>alert(1)</script>"
-    assert payload["slides"][0]["layout_hint"] == "two-column"
-    assert payload["slides"][0]["pattern"] == "split-hero"
+    assert payload["slides"][0]["title"] == 'Roadmap <script>alert(1)</script>'
+    assert "<b>" in payload["slides"][0]["bullets"][0]
 
     html = HtmlDeckRenderer().render(deck)
-    assert "Notes:" in html
-    assert "&lt;confidential&gt;" in html
     assert "&lt;script&gt;alert(1)&lt;/script&gt;" in html
-    assert "layout=two-column" in html
-    assert "pattern=split-hero" in html
+    assert "&lt;b&gt;not bold in deck&lt;/b&gt;" in html
+    assert 'data-layout="two-column"' in html

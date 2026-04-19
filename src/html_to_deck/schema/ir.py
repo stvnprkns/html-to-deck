@@ -14,11 +14,22 @@ class SlideIntent(str, Enum):
 
 
 @dataclass(frozen=True)
+class SlideImage:
+    """Raster figure extracted from source HTML (standalone deck viewer)."""
+
+    src: str
+    alt: str = ""
+    width: int | None = None
+    height: int | None = None
+
+
+@dataclass(frozen=True)
 class Slide:
     intent: SlideIntent
     title: str
     bullets: list[str] = field(default_factory=list)
     metadata: dict[str, Any] = field(default_factory=dict)
+    figures: tuple[SlideImage, ...] = ()
 
 
 @dataclass(frozen=True)

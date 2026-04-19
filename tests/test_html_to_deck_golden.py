@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 
 from html_to_deck.pipeline.orchestrator import HtmlToDeckPipeline
-from html_to_deck.types import PipelineInput
+from html_to_deck.types import PipelineInput, SourceKind
 
 SNAPSHOT_PATH = Path(__file__).parent / "snapshots" / "html_to_deck_output.json"
 
@@ -16,7 +16,7 @@ def test_html_to_deck_fixture_output_golden(tmp_path: Path, fixture_paths: list[
 
     for fixture in fixture_paths:
         output = tmp_path / f"{fixture.stem}.json"
-        pipeline.run(PipelineInput(source=fixture, is_file=True), output)
+        pipeline.run(PipelineInput(source=fixture, source_kind=SourceKind.FILE), output)
         actual[fixture.stem] = json.loads(output.read_text(encoding="utf-8"))
 
     payload = json.dumps(actual, indent=2, sort_keys=True)
