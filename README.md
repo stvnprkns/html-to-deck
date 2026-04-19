@@ -1,6 +1,58 @@
 # html-to-deck v1
 
-This repository provides a deterministic **v1 HTML → deck JSON** reference pipeline, fixtures, and snapshot-driven test coverage.
+This repository provides a deterministic **v1 HTML → deck JSON** reference pipeline, fixtures, and snapshot-driven test coverage. It also ships a **standalone HTML slide viewer** suitable for portfolio sites.
+
+## Install
+
+From the repository root (Python 3.11+):
+
+```bash
+pip install .
+```
+
+This installs the `html_to_deck` package and the **`html-to-deck`** command-line tool (ensure your user script directory is on `PATH`, or invoke `python3 -m html_to_deck.cli`).
+
+## Portfolio quickstart
+
+1. Structure your source HTML as described in **[docs/authoring-decks.md](docs/authoring-decks.md)** (one `<h1>`, section `<h2>`s, focused paragraphs and lists, `<img>` for figures).
+2. Map your site’s design tokens (optional): see **[docs/design-tokens.md](docs/design-tokens.md)** for the `--deck-*` contract and built-in aliases such as `--primary` / `--background`.
+3. Generate a deck for embedding in a page or static host:
+
+```bash
+html-to-deck --input case-study.html --output public/deck.html \
+  --theme portfolio --layout embed \
+  --tokens-css ./deck-tokens.css \
+  --no-audit-badge --no-source-link \
+  --audit-output none
+```
+
+- **`--layout embed`** — centered `max-width`, `min-height` instead of locking the shell to `100vh` (better inside an article layout).
+- **`--tokens-css`** — CSS injected **before** the theme (map site variables to `--deck-*`).
+- **`--extra-css`** — overrides injected **after** the theme.
+- **`--no-audit-badge` / `--no-source-link`** — cleaner public-facing HTML.
+
+### Python API
+
+```python
+from pathlib import Path
+from html_to_deck import convert
+
+convert(
+    Path("case-study.html"),
+    Path("public/deck.html"),
+    theme="portfolio",
+    layout="embed",
+    tokens_css=Path("deck-tokens.css").read_text(encoding="utf-8"),
+    show_audit_badge=False,
+    show_source_link=False,
+)
+```
+
+`render_html_string(...)` renders a `DeckDocument` to HTML without writing a file.
+
+### Cursor skill
+
+For agent-assisted authoring and CLI usage, see **`.cursor/skills/html-to-deck-portfolio/SKILL.md`**.
 
 ## Architecture
 
@@ -47,10 +99,16 @@ This repository provides a deterministic **v1 HTML → deck JSON** reference pip
 
 ## CLI usage
 
-Run pipeline for a single HTML input:
+Print version:
 
 ```bash
-PYTHONPATH=src python -m html_to_deck_v1 fixtures/html/report-summary.html
+html-to-deck --version
+```
+
+Run the legacy v1 JSON pipeline (fixture snapshot style):
+
+```bash
+PYTHONPATH=src python3 -m html_to_deck_v1 fixtures/html/report-summary.html
 ```
 
 The command prints the final JSON deck spec.
@@ -58,24 +116,30 @@ The command prints the final JSON deck spec.
 Generate an interactive HTML deck viewer (keyboard + touch navigation):
 
 ```bash
-PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html
+html-to-deck --input fixtures/html/report-summary.html --output out/deck.html --format html
+```
+
+Or without installing (development tree):
+
+```bash
+PYTHONPATH=src python3 -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html
 ```
 
 The CLI prints the written output path on stdout (for example `out/deck.html`), then prints the audit summary by default.
 
 ### HTML viewer themes
 
-- **`default`** — Original dark “midnight” viewer (still the default when `--theme` is omitted).
-- **`portfolio`** — Warm light page shell, `prefers-color-scheme` dark palette, Instrument Serif + Inter headings/body, accent-colored progress (see `src/html_to_deck/renderers/themes.py`).
+- **`default`** — Dark “midnight” viewer (default when `--theme` is omitted).
+- **`portfolio`** — Warm light shell, `prefers-color-scheme` dark palette, Instrument Serif + Inter (see `src/html_to_deck/renderers/themes.py`).
 
 ```bash
-PYTHONPATH=src python -m html_to_deck.cli --input fixtures/html/report-summary.html --output out/deck.html --format html --theme portfolio
+html-to-deck --input fixtures/html/report-summary.html --output out/deck.html --format html --theme portfolio
 ```
 
 Append your own CSS after the theme (HTML output only):
 
 ```bash
-PYTHONPATH=src python -m html_to_deck.cli --input page.html --output out/deck.html --format html --theme portfolio --extra-css ./overrides.css
+html-to-deck --input page.html --output out/deck.html --format html --theme portfolio --extra-css ./overrides.css
 ```
 
 ### Authoring narrative source
@@ -84,13 +148,19 @@ See **[docs/authoring-decks.md](docs/authoring-decks.md)** for how to structure 
 
 ### Python version
 
-Use Python 3.11+ when running the new `html_to_deck.cli` entrypoint locally.
-Older interpreters (for example 3.9) may fail on enum features used by the v1 CLI/tooling.
+Use Python 3.11+ for `html_to_deck.cli` and packaged installs.
 
 ## Running tests
 
 ```bash
-PYTHONPATH=src pytest -q
+pip install -e ".[dev]"
+python3 -m pytest -q
+```
+
+During development without an editable install:
+
+```bash
+PYTHONPATH=src python3 -m pytest -q
 ```
 
 ## Fixture format and snapshot workflow
@@ -111,7 +181,7 @@ Guidelines:
 2. Regenerate snapshots:
 
    ```bash
-   PYTHONPATH=src python - <<'PY'
+   PYTHONPATH=src python3 - <<'PY'
    import json
    from pathlib import Path
    from html_to_deck_v1.pipeline import run_pipeline
@@ -146,3 +216,4 @@ Guidelines:
 - Semantics are intentionally simple (headings + paragraphs + list items + HTML images).
 - Audit rule set is minimal and intended as a baseline.
 - Markdown image references are flagged as warnings, not rendered as slides; use HTML `<img>` for figures in the standalone viewer.
+- Fetching remote HTML requires `HTML_TO_DECK_ENABLE_URL_INGEST=1` (see `src/html_to_deck/ingest/loader.py`).

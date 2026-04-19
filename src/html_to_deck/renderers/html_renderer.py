@@ -3,12 +3,14 @@
 from __future__ import annotations
 
 import json
+import re
 from html import escape
 
 from ..audit import AuditReport
 from ..schema.ir import DeckDocument, SlideImage
 from .themes import font_links_for_theme, normalize_theme_id, theme_css
 
+_MAX_META_DESC = 200
 
 _BASE_JS = """
 (function () {
@@ -17,6 +19,7 @@ _BASE_JS = """
   const counter = document.querySelector('[data-counter]');
   const prev = document.querySelector('[data-prev]');
   const next = document.querySelector('[data-next]');
+  const live = document.querySelector('[data-slide-live]');
 
   if (!slides.length) return;
 
@@ -28,6 +31,15 @@ _BASE_JS = """
 
   let index = clamp(fromHash());
 
+  const announce = () => {
+    if (!live) return;
+    const el = slides[index];
+    const titleEl = el && el.querySelector('h1');
+    const title = titleEl ? titleEl.textContent.trim() : '';
+    live.textContent = title ? ('Slide ' + (index + 1) + ' of ' + slides.length + ': ' + title)
+      : ('Slide ' + (index + 1) + ' of ' + slides.length);
+  };
+
   const render = () => {
     slides.forEach((el, i) => el.classList.toggle('is-active', i === index));
     const pct = ((index + 1) / slides.length) * 100;
@@ -36,6 +48,7 @@ _BASE_JS = """
     prev.disabled = index === 0;
     next.disabled = index === slides.length - 1;
     location.hash = 'slide-' + (index + 1);
+    announce();
   };
 
   const go = (nextIndex) => { index = clamp(nextIndex); render(); };
@@ -81,9 +94,22 @@ _BASE_JS = """
 class HtmlDeckRenderer:
     """Render a DeckDocument into a standalone interactive HTML slideshow."""
 
-    def __init__(self, *, theme: str = "default", extra_css: str | None = None) -> None:
+    def __init__(
+        self,
+        *,
+        theme: str = "default",
+        tokens_css: str | None = None,
+        extra_css: str | None = None,
+        layout: str = "fullscreen",
+        show_audit_badge: bool = True,
+        show_source_link: bool = True,
+    ) -> None:
         self._theme = normalize_theme_id(theme)
+        self._tokens_css = (tokens_css or "").strip()
         self._extra_css = (extra_css or "").strip()
+        self._layout = layout if layout in {"fullscreen", "embed"} else "fullscreen"
+        self._show_audit_badge = show_audit_badge
+        self._show_source_link = show_source_link
 
     def render(self, deck: DeckDocument, audit_report: AuditReport | None = None) -> str:
         slide_markup = "\n".join(
@@ -91,8 +117,10 @@ class HtmlDeckRenderer:
             for idx, slide in enumerate(deck.slides, start=1)
         )
         title = escape(deck.slides[0].title if deck.slides else "Generated Deck")
-        source_link_markup = self._render_source_link(deck.source_href)
-        audit_markup = self._render_audit_summary(audit_report)
+        source_link_markup = (
+            self._render_source_link(deck.source_href) if self._show_source_link else ""
+        )
+        audit_markup = self._render_audit_summary(audit_report) if self._show_audit_badge else ""
 
         if audit_report is not None:
             audit_payload = escape(json.dumps(audit_report.to_dict(), sort_keys=True))
@@ -103,30 +131,43 @@ class HtmlDeckRenderer:
 
         base_css = theme_css(self._theme)
         font_links = font_links_for_theme(self._theme)
+        tokens_style = f"\n{self._tokens_css}\n" if self._tokens_css else ""
         extra_style = f"\n{self._extra_css}\n" if self._extra_css else ""
+
+        deck_classes = "deck"
+        if self._layout == "embed":
+            deck_classes += " deck--embed"
+
+        meta_desc = self._meta_description(deck)
+        meta_tag = (
+            f'  <meta name="description" content="{escape(meta_desc, quote=True)}" />\n'
+            if meta_desc
+            else ""
+        )
 
         return f"""<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>{title}</title>
+{meta_tag}  <title>{title}</title>
   {font_links}
   <style>
-{base_css}
+{tokens_style}{base_css}
 {extra_style}
   </style>
 </head>
 <body>
-  <main class="deck" data-deck-type="{escape(deck.deck_type)}" data-theme="{escape(self._theme)}">
-    <section class="slides">{slide_markup}</section>
+  <div class="visually-hidden" aria-live="polite" aria-atomic="true" data-slide-live></div>
+  <main class="{deck_classes}" data-deck-type="{escape(deck.deck_type)}" data-theme="{escape(self._theme)}" data-layout="{escape(self._layout)}">
+    <section class="slides" aria-roledescription="carousel" aria-label="Slide deck">{slide_markup}</section>
     <footer class="controls">
       <button type="button" data-prev aria-label="Previous slide">◀ Prev</button>
       <div class="progress" aria-hidden="true"><div data-progress></div></div>
       <button type="button" data-next aria-label="Next slide">Next ▶</button>
       {source_link_markup}
       {audit_markup}
-      <div class="meta" data-counter>0 / 0</div>
+      <div class="meta" aria-hidden="true" data-counter>0 / 0</div>
       <p class="hint">Arrow keys or space · swipe</p>
     </footer>
   </main>
@@ -135,6 +176,20 @@ class HtmlDeckRenderer:
 </body>
 </html>
 """
+
+    @staticmethod
+    def _meta_description(deck: DeckDocument) -> str:
+        if not deck.slides:
+            return ""
+        parts: list[str] = []
+        for slide in deck.slides[:3]:
+            parts.append(slide.title.strip())
+            parts.extend(b.strip() for b in slide.bullets[:2] if b.strip())
+        text = " — ".join(p for p in parts if p)
+        text = re.sub(r"\s+", " ", text).strip()
+        if len(text) > _MAX_META_DESC:
+            return text[: _MAX_META_DESC - 1].rstrip() + "…"
+        return text
 
     @staticmethod
     def _render_figures(figures: tuple[SlideImage, ...]) -> str:
@@ -172,9 +227,11 @@ class HtmlDeckRenderer:
         figures_markup = HtmlDeckRenderer._render_figures(figures)
         data_layout = (metadata or {}).get("layout")
         layout_attr = f' data-layout="{escape(str(data_layout), quote=True)}"' if data_layout else ""
+        labelledby = f'slide-{index}-title'
         return (
-            f'<article class="slide" id="slide-{index}"{layout_attr}>'
-            f'<section class="slide-inner"><h1>{escape(title)}</h1>{list_markup}{figures_markup}</section>'
+            f'<article class="slide" id="slide-{index}" role="group" aria-roledescription="slide" '
+            f'aria-labelledby="{labelledby}"{layout_attr}>'
+            f'<section class="slide-inner"><h1 id="{labelledby}">{escape(title)}</h1>{list_markup}{figures_markup}</section>'
             "</article>"
         )
 

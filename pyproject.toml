@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.24.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "html-to-deck"
+dynamic = ["version"]
+description = "Deterministic HTML to slide deck (JSON + standalone HTML viewer)."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "html-to-deck contributors" }]
+keywords = ["slides", "deck", "html", "presentation"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.11",
+  "Programming Language :: Python :: 3.12",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8.0"]
+
+[project.scripts]
+html-to-deck = "html_to_deck.cli:main"
+
+[tool.hatch.version]
+path = "src/html_to_deck/_version.py"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/html_to_deck", "src/html_to_deck_v1"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+  "/src",
+  "/tests",
+  "/fixtures",
+  "/docs",
+  "/README.md",
+  "/pyproject.toml",
+]
